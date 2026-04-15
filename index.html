@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VM 2026 – Tipstävling</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a1a1a;font-size:15px;line-height:1.5}
+.app{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
+h1{font-size:22px;font-weight:600;margin-bottom:4px}
+.subtitle{font-size:14px;color:#666;margin-bottom:1.5rem}
+.tabs{display:flex;gap:0;border-bottom:1px solid #ddd;margin-bottom:1.5rem}
+.tab{padding:9px 18px;font-size:14px;background:none;border:none;border-bottom:2px solid transparent;color:#666;cursor:pointer;margin-bottom:-1px;font-family:inherit}
+.tab:hover{color:#333}
+.tab.active{border-bottom-color:#1a73e8;color:#1a73e8;font-weight:500}
+.view{display:none}.view.active{display:block}
+.stepper{display:flex;overflow-x:auto;margin-bottom:1.5rem;background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:0}
+.sbtn{flex:1;min-width:60px;padding:10px 4px;font-size:11px;text-align:center;background:none;border:none;border-bottom:3px solid transparent;color:#888;cursor:default;font-family:inherit}
+.sbtn.done{border-bottom-color:#34a853;color:#1e7e34;cursor:pointer}
+.sbtn.active{border-bottom-color:#1a73e8;color:#1a73e8;font-weight:600}
+.step{display:none}.step.on{display:block}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem}
+.ptitle{font-size:18px;font-weight:600;margin-bottom:4px}
+.psub{font-size:13px;color:#666;margin-bottom:1.25rem}
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:1.25rem}
+.gc{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:.875rem 1rem;transition:border-color .15s}
+.gc.err{border-color:#e53935}
+.gl{font-size:12px;font-weight:600;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.gbadge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#e8f0fe;color:#1a73e8;font-size:11px;font-weight:700}
+.pr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pr label{font-size:12px;color:#666;min-width:36px}
+.pr select{flex:1;font-size:13px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;background:#fff;font-family:inherit}
+.pr select.s1{border-color:#34a853}
+.pr select.s2{border-color:#1a73e8}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-bottom:1.25rem}
+.ci{display:flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #e5e5e5;border-radius:8px;cursor:pointer;font-size:13px;background:#fff;user-select:none;transition:all .1s}
+.ci:hover{border-color:#aaa}
+.ci.sel{border-color:#1a73e8;background:#e8f0fe;color:#1557b0}
+.ci .cb{width:15px;height:15px;border:1.5px solid #bbb;border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff}
+.ci.sel .cb{background:#1a73e8;border-color:#1a73e8}
+.ci.sel .cb::after{content:'';display:block;width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px)}
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-bottom:1.25rem}
+.ri{display:flex;align-items:center;justify-content:center;padding:10px;border:1px solid #e5e5e5;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;background:#fff;user-select:none;text-align:center;transition:all .1s}
+.ri:hover{border-color:#aaa}
+.ri.sel{border-color:#34a853;background:#e6f4ea;color:#1e7e34}
+.sc{font-size:13px;color:#666;margin-bottom:10px}
+.sc span{font-weight:600;color:#333}
+.nav{display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap;align-items:center}
+button{padding:8px 18px;font-size:13px;font-family:inherit;border:1px solid #ddd;border-radius:8px;background:#fff;color:#333;cursor:pointer;transition:all .1s}
+button:hover{background:#f5f5f5;border-color:#bbb}
+button.primary{background:#1a73e8;color:#fff;border-color:#1a73e8}
+button.primary:hover{background:#1557b0}
+button.danger{color:#c62828;border-color:#ef9a9a}
+button.danger:hover{background:#fce4e4}
+.em{font-size:12px;color:#c62828;margin-top:8px;display:none;padding:6px 10px;background:#fce4e4;border-radius:6px}
+.fl{margin-bottom:1.25rem}
+.fl label{font-size:13px;color:#555;display:block;margin-bottom:5px;font-weight:500}
+.fl input{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;width:100%;max-width:320px}
+.fl input:focus{outline:none;border-color:#1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.15)}
+.sumwrap{background:#f8f9fa;border:1px solid #e5e5e5;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem}
+.ssec{margin-bottom:.875rem}
+.ssec h3{font-size:11px;font-weight:600;color:#888;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.spicks{display:flex;flex-wrap:wrap;gap:5px}
+.pk{font-size:12px;padding:3px 9px;border-radius:20px;font-weight:500}
+.pk.b{background:#e8f0fe;color:#1557b0}
+.pk.g{background:#e6f4ea;color:#1e7e34}
+.pk.a{background:#fef3e2;color:#e37400}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:3px}
+.sr{font-size:13px;color:#666}.sr span{color:#333;font-weight:500}
+
+.stbl-wrap{overflow-x:auto}
+.stbl{width:100%;border-collapse:collapse;font-size:14px;min-width:400px}
+.stbl th{font-size:12px;font-weight:600;color:#666;text-align:left;padding:8px 10px;border-bottom:2px solid #e5e5e5;white-space:nowrap}
+.stbl td{padding:10px 10px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:middle}
+.stbl tr:last-child td{border-bottom:none}
+.stbl tbody tr:hover td{background:#fafafa}
+.rank{font-weight:700;font-size:14px}
+.rank.r1{color:#f9a825}.rank.r2{color:#90a4ae}.rank.r3{color:#a1664a}
+.pts{font-weight:700;font-size:16px;color:#1a73e8}
+.breakdown{font-size:12px;color:#888}
+.phase-badge{display:inline-block;font-size:12px;padding:4px 12px;border-radius:20px;margin-bottom:1rem;font-weight:500}
+.phase-badge.p1{background:#e8f0fe;color:#1557b0}
+.phase-badge.p2{background:#e6f4ea;color:#1e7e34}
+.phase-badge.p3{background:#fef3e2;color:#e37400}
+.no-entries{font-size:14px;color:#888;padding:1rem 0}
+
+.adm-sec{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.adm-sec h3{font-size:15px;font-weight:600;margin-bottom:1rem;color:#333}
+.adm-gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin-bottom:.875rem}
+.adm-gc{background:#f8f9fa;border:1px solid #e5e5e5;border-radius:8px;padding:.75rem 1rem}
+.adm-gl{font-size:12px;font-weight:600;color:#666;margin-bottom:6px}
+.adm-pr{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12px}
+.adm-pr label{min-width:36px;color:#666}
+.adm-pr select{flex:1;font-size:12px;padding:4px 7px;border:1px solid #ddd;border-radius:6px;font-family:inherit}
+.adm-cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:5px;margin-bottom:.75rem}
+.adm-ci{padding:6px 10px;border:1px solid #e5e5e5;border-radius:7px;cursor:pointer;font-size:12px;background:#fff;user-select:none;transition:all .1s}
+.adm-ci:hover{border-color:#aaa}
+.adm-ci.sel{background:#e6f4ea;border-color:#34a853;color:#1e7e34;font-weight:500}
+.adm-ri{padding:6px 10px;border:1px solid #e5e5e5;border-radius:7px;cursor:pointer;font-size:12px;background:#fff;user-select:none;transition:all .1s;text-align:center}
+.adm-ri:hover{border-color:#aaa}
+.adm-ri.sel{background:#fef3e2;border-color:#f9a825;color:#e37400;font-weight:500}
+.adm-fl{margin-bottom:.75rem}
+.adm-fl label{font-size:12px;color:#666;display:block;margin-bottom:3px;font-weight:500}
+.adm-fl input{padding:6px 10px;border:1px solid #ddd;border-radius:7px;font-size:13px;font-family:inherit;max-width:260px;width:100%}
+.phase-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.pbtn{padding:7px 16px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#555;cursor:pointer;font-family:inherit;transition:all .1s}
+.pbtn:hover{background:#f5f5f5}
+.pbtn.ap{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8;font-weight:600}
+.adm-entry-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:13px;gap:8px;flex-wrap:wrap}
+.adm-entry-row:last-child{border-bottom:none}
+.success-msg{display:none;font-size:13px;color:#1e7e34;padding:6px 12px;background:#e6f4ea;border-radius:7px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>VM 2026 – Tipstävling</h1>
+  <p class="subtitle">USA, Kanada &amp; Mexiko &bull; 11 juni – 19 juli 2026</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showView('tips',this)">Mitt tips</button>
+    <button class="tab" onclick="showView('stallning',this)">Ställning</button>
+    <button class="tab" onclick="showView('admin',this)">Admin</button>
+  </div>
+
+  <div id="v-tips" class="view active">
+    <div class="stepper" id="stepper"></div>
+
+    <div id="s0" class="step on card">
+      <div class="ptitle">Välkommen!</div>
+      <div class="psub">Fyll i ditt namn för att starta tipset</div>
+      <div class="fl"><label for="namn">Ditt namn</label><input type="text" id="namn" placeholder="Förnamn Efternamn" autocomplete="off"/></div>
+      <div class="em" id="e0">Ange ditt namn.</div>
+      <div class="nav"><button class="primary" onclick="nx(0)">Starta tipset &rarr;</button></div>
+    </div>
+
+    <div id="s1" class="step card">
+      <div class="ptitle">Steg 1 – Gruppspelet</div>
+      <div class="psub">Välj etta och tvåa i varje grupp (A–L). Poäng: 1p per rätt lag i topp-2, +1p bonus för rätt etta.</div>
+      <div class="gg" id="ggrids"></div>
+      <div class="em" id="e1">Fyll i alla 12 grupper. Etta och tvåa får inte vara samma lag.</div>
+      <div class="nav"><button onclick="pv(1)">&larr; Tillbaka</button><button class="primary" onclick="nx(1)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s2" class="step card">
+      <div class="ptitle">Steg 2 – Kvartsfinalister</div>
+      <div class="psub">Välj exakt 8 lag som du tror når kvartsfinal. (2p per rätt lag)</div>
+      <div class="sc" id="c2">Valda: <span>0</span> / 8</div>
+      <div class="cg" id="qfg"></div>
+      <div class="em" id="e2">Välj exakt 8 lag.</div>
+      <div class="nav"><button onclick="pv(2)">&larr; Tillbaka</button><button class="primary" onclick="nx(2)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s3" class="step card">
+      <div class="ptitle">Steg 3 – Semifinalister</div>
+      <div class="psub">Välj exakt 4 lag som du tror når semifinal. (3p per rätt lag)</div>
+      <div class="sc" id="c3">Valda: <span>0</span> / 4</div>
+      <div class="cg" id="sfg"></div>
+      <div class="em" id="e3">Välj exakt 4 lag.</div>
+      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s4" class="step card">
+      <div class="ptitle">Steg 4 – Finalister</div>
+      <div class="psub">Välj de 2 lag som spelar finalen. (4p per rätt lag)</div>
+      <div class="sc" id="c4">Valda: <span>0</span> / 2</div>
+      <div class="cg" id="fing"></div>
+      <div class="em" id="e4">Välj exakt 2 lag.</div>
+      <div class="nav"><button onclick="pv(4)">&larr; Tillbaka</button><button class="primary" onclick="nx(4)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s5" class="step card">
+      <div class="ptitle">Steg 5 – VM-mästare</div>
+      <div class="psub">Vilket av finallagen vinner VM? (6p för rätt)</div>
+      <div class="rg" id="wing"></div>
+      <div class="em" id="e5">Välj ett lag.</div>
+      <div class="nav"><button onclick="pv(5)">&larr; Tillbaka</button><button class="primary" onclick="nx(5)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s6" class="step card">
+      <div class="ptitle">Steg 6 – Skyttekung</div>
+      <div class="psub">Vilken spelare vinner skytteligan? (10p för rätt, måste stava rätt)</div>
+      <div class="fl"><label for="skytt">Spelarens namn</label><input type="text" id="skytt" placeholder="t.ex. Kylian Mbappé" autocomplete="off"/></div>
+      <div class="em" id="e6">Ange en spelare.</div>
+      <div class="nav"><button onclick="pv(6)">&larr; Tillbaka</button><button class="primary" onclick="nx(6)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s7" class="step card">
+      <div class="ptitle">Steg 7 – Antal mål</div>
+      <div class="psub">Hur många mål görs totalt under hela mästerskapet? Närmaste gissning vinner (5p exakt, 3p inom ±5, 1p inom ±10).</div>
+      <div class="fl">
+        <label for="mal">Antal mål</label>
+        <input type="number" id="mal" placeholder="t.ex. 260" min="50" max="600" style="max-width:160px"/>
+      </div>
+      <div style="font-size:12px;color:#888;margin-top:4px">Tips: VM 2022 gav 172 mål på 64 matcher. VM 2026 har 104 matcher.</div>
+      <div class="em" id="e7">Ange ett rimligt antal mål (50–600).</div>
+      <div class="nav"><button onclick="pv(7)">&larr; Tillbaka</button><button class="primary" onclick="nx(7)">Nästa &rarr;</button></div>
+    </div>
+
+    <div id="s8" class="step card">
+      <div class="ptitle">Bekräfta ditt tips</div>
+      <div class="psub">Kontrollera ditt tips och skicka in.</div>
+      <div class="sumwrap" id="sumwrap"></div>
+      <div class="nav"><button onclick="pv(8)">&larr; Ändra</button><button class="primary" onclick="submit()">Skicka in tips &rarr;</button></div>
+      <div class="success-msg" id="ok-msg">Ditt tips är inskickat!</div>
+    </div>
+  </div>
+
+  <div id="v-stallning" class="view">
+    <div id="phase-info"></div>
+    <div class="stbl-wrap" id="stbl-wrap"></div>
+  </div>
+
+  <div id="v-admin" class="view">
+    <div class="adm-sec">
+      <h3>Aktiv fas</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:.75rem">Styr vilka poäng som räknas in i ställningen.</p>
+      <div class="phase-row">
+        <button class="pbtn ap" id="pb1" onclick="setPhase(1)">Fas 1 – Grupper</button>
+        <button class="pbtn" id="pb2" onclick="setPhase(2)">Fas 2 – Slutspel</button>
+        <button class="pbtn" id="pb3" onclick="setPhase(3)">Fas 3 – Allt</button>
+      </div>
+    </div>
+
+    <div class="adm-sec">
+      <h3>Fas 1 – Gruppresultat</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:.875rem">Mata in vilka lag som slutade etta och tvåa i varje grupp.</p>
+      <div class="adm-gg" id="adm-groups"></div>
+      <button class="primary" onclick="saveAdmin()">Spara resultat</button>
+      <div class="success-msg" id="adm-ok">Sparat!</div>
+    </div>
+
+    <div class="adm-sec">
+      <h3>Fas 2 – Slutspelsresultat</h3>
+      <div style="font-size:13px;font-weight:600;color:#555;margin-bottom:.5rem">Kvartsfinalister (välj 8)</div>
+      <div class="adm-cg" id="adm-qf"></div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Semifinalister (välj 4)</div>
+      <div class="adm-cg" id="adm-sf"></div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Finalister (välj 2)</div>
+      <div class="adm-cg" id="adm-fin"></div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">VM-mästare</div>
+      <div class="adm-cg" id="adm-win"></div>
+      <button class="primary" onclick="saveAdmin()" style="margin-top:.5rem">Spara resultat</button>
+    </div>
+
+    <div class="adm-sec">
+      <h3>Fas 3 – Slutresultat</h3>
+      <div class="adm-fl"><label>Skyttekung (exakt stavning)</label><input type="text" id="adm-skytt" placeholder="t.ex. Kylian Mbappé"/></div>
+      <div class="adm-fl"><label>Totalt antal mål i turneringen</label><input type="number" id="adm-mal" placeholder="t.ex. 263" style="max-width:160px"/></div>
+      <button class="primary" onclick="saveAdmin()">Spara resultat</button>
+    </div>
+
+    <div class="adm-sec">
+      <h3>Inlämnade tips (<span id="entry-count">0</span> st)</h3>
+      <div id="adm-entries"></div>
+      <button class="danger" onclick="rensaTips()" style="margin-top:.75rem">Rensa alla tips</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GROUPS=[
+  {l:"A",t:["Mexiko","Sydkorea","Sydafrika","Tjeckien"]},
+  {l:"B",t:["Kanada","Schweiz","Qatar","Bosnien och Hercegovina"]},
+  {l:"C",t:["Brasilien","Marocko","Skottland","Haiti"]},
+  {l:"D",t:["USA","Australien","Paraguay","Turkiet"]},
+  {l:"E",t:["Tyskland","Ecuador","Elfenbenskusten","Curaçao"]},
+  {l:"F",t:["Nederländerna","Japan","Tunisien","Sverige"]},
+  {l:"G",t:["Belgien","Iran","Egypten","Nya Zeeland"]},
+  {l:"H",t:["Spanien","Uruguay","Saudiarabien","Kap Verde"]},
+  {l:"I",t:["Frankrike","Senegal","Norge","Irak"]},
+  {l:"J",t:["Argentina","Österrike","Algeriet","Jordanien"]},
+  {l:"K",t:["Portugal","Colombia","Uzbekistan","DR Kongo"]},
+  {l:"L",t:["England","Kroatien","Panama","Ghana"]}
+];
+const ALL=GROUPS.flatMap(g=>g.t).sort((a,b)=>a.localeCompare(b,'sv'));
+const SLABELS=["Namn","Grupper","Kvartsfinalar","Semifianlister","Finalister","Mästare","Skyttekung","Antal mål","Bekräfta"];
+
+let entries=[],results={gr:{},qf:[],sf:[],fin:[],win:'',skytt:'',mal:''},phase=1,cur=0;
+let tip={namn:'',gr:{},qf:[],sf:[],fin:[],win:'',skytt:'',mal:''};
+
+function loadData(){
+  try{
+    const d=JSON.parse(localStorage.getItem('vm26')||'{}');
+    entries=d.entries||[];
+    results=d.results||{gr:{},qf:[],sf:[],fin:[],win:'',skytt:'',mal:''};
+    phase=d.phase||1;
+  }catch(e){}
+}
+function saveData(){
+  try{localStorage.setItem('vm26',JSON.stringify({entries,results,phase}));}catch(e){}
+}
+loadData();
+
+function showView(v,btn){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('v-'+v).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(v==='stallning')renderStallning();
+  if(v==='admin'){renderAdmGroups();renderAdmSlutspel();renderAdmEntries();updatePhaseBtns();}
+}
+
+function buildStepper(){
+  const s=document.getElementById('stepper');s.innerHTML='';
+  SLABELS.forEach((l,i)=>{
+    const b=document.createElement('button');
+    b.className='sbtn'+(i===cur?' active':i<cur?' done':'');
+    b.textContent=l;
+    if(i<cur)b.onclick=()=>goTo(i);
+    s.appendChild(b);
+  });
+}
+function goTo(n){
+  document.querySelectorAll('.step').forEach(el=>el.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+  cur=n;buildStepper();
+  if(n===2)buildCG('qfg','qf',ALL,8,'c2');
+  if(n===3)buildCG('sfg','sf',tip.qf.length?[...tip.qf].sort((a,b)=>a.localeCompare(b,'sv')):ALL,4,'c3');
+  if(n===4)buildCG('fing','fin',tip.sf.length?[...tip.sf].sort((a,b)=>a.localeCompare(b,'sv')):ALL,2,'c4');
+  if(n===5)buildWin();
+  if(n===8)buildSum();
+}
+function nx(from){if(!valid(from))return;saveStep(from);goTo(from+1);}
+function pv(from){goTo(from-1);}
+
+function valid(s){
+  const hide=id=>{const e=document.getElementById(id);if(e)e.style.display='none';};
+  const show=id=>{const e=document.getElementById(id);if(e)e.style.display='block';};
+  hide('e'+s);
+  if(s===0&&!document.getElementById('namn').value.trim()){show('e0');return false;}
+  if(s===1){
+    let ok=true;
+    GROUPS.forEach(g=>{
+      const a=document.getElementById('ea-'+g.l),b=document.getElementById('eb-'+g.l);
+      const gc=document.getElementById('gc-'+g.l);
+      if(!a.value||!b.value||a.value===b.value){gc.classList.add('err');ok=false;}
+      else gc.classList.remove('err');
+    });
+    if(!ok){show('e1');return false;}
+  }
+  if(s===2&&tip.qf.length!==8){show('e2');return false;}
+  if(s===3&&tip.sf.length!==4){show('e3');return false;}
+  if(s===4&&tip.fin.length!==2){show('e4');return false;}
+  if(s===5&&!tip.win){show('e5');return false;}
+  if(s===6&&!document.getElementById('skytt').value.trim()){show('e6');return false;}
+  if(s===7){const v=parseInt(document.getElementById('mal').value);if(isNaN(v)||v<50||v>600){show('e7');return false;}}
+  return true;
+}
+function saveStep(s){
+  if(s===0)tip.namn=document.getElementById('namn').value.trim();
+  if(s===1){tip.gr={};GROUPS.forEach(g=>{tip.gr[g.l]={e:document.getElementById('ea-'+g.l).value,t:document.getElementById('eb-'+g.l).value};});}
+  if(s===6)tip.skytt=document.getElementById('skytt').value.trim();
+  if(s===7)tip.mal=document.getElementById('mal').value;
+}
+
+function buildGroups(){
+  const c=document.getElementById('ggrids');c.innerHTML='';
+  GROUPS.forEach(g=>{
+    const d=document.createElement('div');d.className='gc';d.id='gc-'+g.l;
+    const o=g.t.map(t=>`<option value="${t}">${t}</option>`).join('');
+    d.innerHTML=`<div class="gl"><span class="gbadge">${g.l}</span>Grupp ${g.l}</div>
+      <div class="pr"><label>Etta</label><select class="s1" id="ea-${g.l}"><option value="">— välj —</option>${o}</select></div>
+      <div class="pr"><label>Tvåa</label><select class="s2" id="eb-${g.l}"><option value="">— välj —</option>${o}</select></div>`;
+    c.appendChild(d);
+  });
+}
+
+function buildCG(gid,key,teams,max,cid){
+  const g=document.getElementById(gid);g.innerHTML='';
+  teams.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='ci'+(tip[key].includes(t)?' sel':'');
+    d.innerHTML=`<span class="cb"></span>${t}`;
+    d.onclick=()=>{
+      const arr=tip[key],idx=arr.indexOf(t);
+      if(idx>=0)arr.splice(idx,1);else if(arr.length<max)arr.push(t);
+      g.querySelectorAll('.ci').forEach(el=>el.classList.toggle('sel',arr.includes(el.textContent.trim())));
+      document.querySelector('#'+cid+' span').textContent=arr.length+' / '+max;
+      if(key==='fin'&&tip.win&&!tip.fin.includes(tip.win))tip.win='';
+    };
+    g.appendChild(d);
+  });
+  document.querySelector('#'+cid+' span').textContent=tip[key].length+' / '+max;
+}
+
+function buildWin(){
+  const g=document.getElementById('wing');g.innerHTML='';
+  const teams=tip.fin.length===2?[...tip.fin]:ALL.slice(0,2);
+  teams.forEach(t=>{
+    const d=document.createElement('div');d.className='ri'+(tip.win===t?' sel':'');
+    d.textContent=t;
+    d.onclick=()=>{tip.win=t;g.querySelectorAll('.ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
+    g.appendChild(d);
+  });
+}
+
+function buildSum(){
+  const w=document.getElementById('sumwrap');
+  const gr=GROUPS.map(g=>{const p=tip.gr[g.l];return`<div class="sr">G${g.l}: <span>${p?p.e:'?'}</span> / <span>${p?p.t:'?'}</span></div>`;}).join('');
+  w.innerHTML=`
+    <div class="ssec"><h3>Namn</h3><div style="font-size:15px;font-weight:600">${tip.namn}</div></div>
+    <div class="ssec"><h3>Grupper (etta / tvåa)</h3><div class="sgrid">${gr}</div></div>
+    <div class="ssec"><h3>Kvartsfinalister</h3><div class="spicks">${tip.qf.map(t=>`<span class="pk b">${t}</span>`).join('')}</div></div>
+    <div class="ssec"><h3>Semifinalister</h3><div class="spicks">${tip.sf.map(t=>`<span class="pk g">${t}</span>`).join('')}</div></div>
+    <div class="ssec"><h3>Finalister</h3><div class="spicks">${tip.fin.map(t=>`<span class="pk a">${t}</span>`).join('')}</div></div>
+    <div class="ssec"><h3>VM-mästare</h3><div style="font-size:15px;font-weight:600;color:#1e7e34">${tip.win||'–'}</div></div>
+    <div class="ssec"><h3>Skyttekung</h3><div style="font-size:14px">${tip.skytt||'–'}</div></div>
+    <div class="ssec"><h3>Antal mål</h3><div style="font-size:14px">${tip.mal||'–'}</div></div>`;
+}
+
+function submit(){
+  entries.push({namn:tip.namn,gr:{...tip.gr},qf:[...tip.qf],sf:[...tip.sf],fin:[...tip.fin],win:tip.win,skytt:tip.skytt,mal:tip.mal,ts:new Date().toLocaleString('sv-SE')});
+  saveData();
+  const ok=document.getElementById('ok-msg');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',3000);
+  tip={namn:'',gr:{},qf:[],sf:[],fin:[],win:'',skytt:'',mal:''};
+  document.getElementById('namn').value='';
+  document.getElementById('skytt').value='';
+  document.getElementById('mal').value='';
+  buildGroups();
+  goTo(0);
+}
+
+function calcScore(e,ph){
+  let p=0,det={gr:0,qf:0,sf:0,fin:0,win:0,skytt:0,mal:0};
+  if(ph>=1&&results.gr){
+    GROUPS.forEach(g=>{
+      const rg=results.gr[g.l],eg=e.gr[g.l];
+      if(!rg||!eg)return;
+      const rTop=[rg.e,rg.t].filter(Boolean);
+      const eTop=[eg.e,eg.t].filter(Boolean);
+      let pts=0;
+      eTop.forEach(t=>{if(rTop.includes(t))pts+=1;});
+      if(rg.e&&eg.e===rg.e)pts+=1;
+      det.gr+=pts;p+=pts;
+    });
+  }
+  if(ph>=2){
+    (e.qf||[]).forEach(t=>{if((results.qf||[]).includes(t)){det.qf+=2;p+=2;}});
+    (e.sf||[]).forEach(t=>{if((results.sf||[]).includes(t)){det.sf+=3;p+=3;}});
+    (e.fin||[]).forEach(t=>{if((results.fin||[]).includes(t)){det.fin+=4;p+=4;}});
+    if(e.win&&e.win===results.win){det.win+=6;p+=6;}
+  }
+  if(ph>=3){
+    if(e.skytt&&results.skytt&&e.skytt.toLowerCase()===results.skytt.toLowerCase()){det.skytt+=10;p+=10;}
+    if(e.mal&&results.mal){const diff=Math.abs(parseInt(e.mal)-parseInt(results.mal));if(diff===0){det.mal+=5;p+=5;}else if(diff<=5){det.mal+=3;p+=3;}else if(diff<=10){det.mal+=1;p+=1;}}
+  }
+  return{total:p,det};
+}
+
+function renderStallning(){
+  const pi=document.getElementById('phase-info');
+  const phNames=['','Fas 1 – efter gruppspelet','Fas 2 – efter slutspelet','Fas 3 – slutresultat'];
+  const phCls=['','p1','p2','p3'];
+  pi.innerHTML=`<div class="phase-badge ${phCls[phase]}">${phNames[phase]}</div>`;
+  const w=document.getElementById('stbl-wrap');
+  if(!entries.length){w.innerHTML='<p class="no-entries">Inga tips inlämnade ännu.</p>';return;}
+  const scored=entries.map((e,i)=>({...e,i,...calcScore(e,phase)})).sort((a,b)=>b.total-a.total);
+  let html=`<table class="stbl"><thead><tr>
+    <th>#</th><th>Namn</th><th>Poäng</th>
+    ${phase>=1?'<th>Grupp</th>':''}
+    ${phase>=2?'<th>KF</th><th>SF</th><th>Final</th><th>Mästare</th>':''}
+    ${phase>=3?'<th>Skytt</th><th>Mål</th>':''}
+  </tr></thead><tbody>`;
+  scored.forEach((e,idx)=>{
+    const rc=idx===0?'r1':idx===1?'r2':idx===2?'r3':'';
+    html+=`<tr>
+      <td><span class="rank ${rc}">${idx+1}</span></td>
+      <td>${e.namn}</td>
+      <td><span class="pts">${e.total}p</span></td>
+      ${phase>=1?`<td class="breakdown">${e.det.gr}p</td>`:''}
+      ${phase>=2?`<td class="breakdown">${e.det.qf}p</td><td class="breakdown">${e.det.sf}p</td><td class="breakdown">${e.det.fin}p</td><td class="breakdown">${e.det.win}p</td>`:''}
+      ${phase>=3?`<td class="breakdown">${e.det.skytt}p</td><td class="breakdown">${e.det.mal}p</td>`:''}
+    </tr>`;
+  });
+  html+=`</tbody></table>`;
+  w.innerHTML=html;
+}
+
+function renderAdmGroups(){
+  const c=document.getElementById('adm-groups');c.innerHTML='';
+  GROUPS.forEach(g=>{
+    const rg=(results.gr&&results.gr[g.l])||{e:'',t:''};
+    const o=g.t.map(t=>`<option value="${t}"${rg.e===t?' selected':''}>${t}</option>`).join('');
+    const o2=g.t.map(t=>`<option value="${t}"${rg.t===t?' selected':''}>${t}</option>`).join('');
+    const d=document.createElement('div');d.className='adm-gc';
+    d.innerHTML=`<div class="adm-gl">Grupp ${g.l}</div>
+      <div class="adm-pr"><label>Etta</label><select id="ra-${g.l}"><option value="">—</option>${o}</select></div>
+      <div class="adm-pr"><label>Tvåa</label><select id="rb-${g.l}"><option value="">—</option>${o2}</select></div>`;
+    c.appendChild(d);
+  });
+}
+
+function renderAdmSlutspel(){
+  const limits={qf:8,sf:4,fin:2};
+  ['qf','sf','fin'].forEach(key=>{
+    const c=document.getElementById('adm-'+key);c.innerHTML='';
+    ALL.forEach(t=>{
+      const d=document.createElement('div');
+      d.className='adm-ci'+((results[key]||[]).includes(t)?' sel':'');
+      d.textContent=t;
+      d.onclick=()=>{
+        const arr=results[key]||[];const idx=arr.indexOf(t);
+        if(idx>=0)arr.splice(idx,1);else if(arr.length<limits[key])arr.push(t);
+        results[key]=arr;
+        c.querySelectorAll('.adm-ci').forEach(el=>el.classList.toggle('sel',arr.includes(el.textContent)));
+      };
+      c.appendChild(d);
+    });
+  });
+  const wc=document.getElementById('adm-win');wc.innerHTML='';
+  ALL.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='adm-ri'+(results.win===t?' sel':'');
+    d.textContent=t;
+    d.onclick=()=>{results.win=t;wc.querySelectorAll('.adm-ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
+    wc.appendChild(d);
+  });
+  if(results.skytt)document.getElementById('adm-skytt').value=results.skytt;
+  if(results.mal)document.getElementById('adm-mal').value=results.mal;
+}
+
+function saveAdmin(){
+  if(!results.gr)results.gr={};
+  GROUPS.forEach(g=>{
+    results.gr[g.l]={e:document.getElementById('ra-'+g.l).value,t:document.getElementById('rb-'+g.l).value};
+  });
+  results.skytt=document.getElementById('adm-skytt').value.trim();
+  results.mal=document.getElementById('adm-mal').value;
+  saveData();
+  const ok=document.getElementById('adm-ok');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',2500);
+}
+
+function setPhase(p){
+  phase=p;saveData();updatePhaseBtns();
+  const pi=document.getElementById('phase-info');
+  const phNames=['','Fas 1 – efter gruppspelet','Fas 2 – efter slutspelet','Fas 3 – slutresultat'];
+  const phCls=['','p1','p2','p3'];
+  if(pi)pi.innerHTML=`<div class="phase-badge ${phCls[p]}">${phNames[p]}</div>`;
+}
+function updatePhaseBtns(){
+  [1,2,3].forEach(i=>{const b=document.getElementById('pb'+i);if(b)b.classList.toggle('ap',phase===i);});
+}
+
+function renderAdmEntries(){
+  const el=document.getElementById('adm-entries');
+  document.getElementById('entry-count').textContent=entries.length;
+  if(!entries.length){el.innerHTML='<p style="font-size:13px;color:#888">Inga tips ännu.</p>';return;}
+  el.innerHTML=entries.map((e,i)=>`
+    <div class="adm-entry-row">
+      <span style="font-weight:500">${e.namn}</span>
+      <span style="color:#888;font-size:12px">${e.ts}</span>
+      <button class="danger" onclick="delEntry(${i})">Ta bort</button>
+    </div>`).join('');
+}
+
+function delEntry(i){
+  if(confirm('Ta bort tipset för '+entries[i].namn+'?')){entries.splice(i,1);saveData();renderAdmEntries();renderStallning();}
+}
+function rensaTips(){
+  if(confirm('Är du säker? Alla tips raderas permanent.')){entries=[];saveData();renderAdmEntries();renderStallning();}
+}
+
+buildGroups();
+buildStepper();
+</script>
+</body>
+</html>
