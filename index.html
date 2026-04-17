@@ -120,6 +120,7 @@ button.danger:hover{background:#fce4e4}
   <div class="tabs">
     <button class="tab active" onclick="showView('tips',this)">Mitt tips</button>
     <button class="tab" onclick="showView('stallning',this)">Ställning</button>
+    <button class="tab" onclick="showView('malstat',this)">M&#xe5lstatistik</button>
     <button class="tab" onclick="showView('admin',this)">Admin</button>
   </div>
 
@@ -200,7 +201,13 @@ button.danger:hover{background:#fce4e4}
 
   <div id="v-stallning" class="view">
     <div id="phase-info"></div>
-    <div id="stbl-wrap"><div class="loading">Laddar ställning...</div></div>
+    <div id="chart-legend" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.25rem"></div>
+    <div id="chart-wrap" style="overflow-x:auto"><div class="loading">Laddar ställning...</div></div>
+    <div id="stbl-wrap" style="margin-top:1.5rem"></div>
+  </div>
+
+  <div id="v-malstat" class="view">
+    <div id="malstat-wrap"><div class="loading">Laddar målstatistik...</div></div>
   </div>
 
   <div id="v-admin" class="view">
@@ -298,6 +305,7 @@ function showView(v,btn){
   document.getElementById('v-'+v).classList.add('active');
   if(btn)btn.classList.add('active');
   if(v==='stallning'){loadFromDB().then(()=>renderStallning());}
+  if(v==='malstat'){loadFromDB().then(()=>renderMalstat());}
   if(v==='admin'){loadFromDB().then(()=>{renderAdmGroups();renderAdmSlutspel();renderAdmEntries();updatePhaseBtns();});}
 }
 
@@ -521,30 +529,89 @@ function renderStallning(){
   const phNames=['','Fas 1 – efter gruppspelet','Fas 2 – efter slutspelet','Fas 3 – slutresultat'];
   const phCls=['','p1','p2','p3'];
   pi.innerHTML=`<div class="phase-badge ${phCls[phase]}">${phNames[phase]}</div>`;
-  const w=document.getElementById('stbl-wrap');
-  if(!entries.length){w.innerHTML='<p class="no-entries">Inga tips inlämnade ännu.</p>';return;}
+  const cw=document.getElementById('chart-wrap');
+  const tw=document.getElementById('stbl-wrap');
+  const lg=document.getElementById('chart-legend');
+  if(!entries.length){cw.innerHTML='<p class="no-entries">Inga tips inlämnade ännu.</p>';tw.innerHTML='';lg.innerHTML='';return;}
+
+  const segments=[
+    {key:'gr',label:'Gruppspel',color:'#34a853'},
+    {key:'qf',label:'Kvartsfinaler',color:'#1a73e8'},
+    {key:'sf',label:'Semifinaler',color:'#9334e6'},
+    {key:'fin',label:'Final',color:'#e37400'},
+    {key:'win',label:'Mästare',color:'#f9a825'},
+    {key:'skytt',label:'Skyttekung',color:'#e53935'},
+    {key:'mal',label:'Antal mål',color:'#00acc1'}
+  ];
+
   const scored=entries.map((e,i)=>{return{...e,i,...calcScore(e,phase)}}).sort((a,b)=>b.total-a.total);
-  let html=`<table class="stbl"><thead><tr>
-    <th>#</th><th>Namn</th><th>Poäng</th>
-    ${phase>=1?'<th>Grupp</th>':''}
-    ${phase>=2?'<th>KF</th><th>SF</th><th>Final</th><th>Mästare</th>':''}
-    ${phase>=3?'<th>Skytt</th><th>Mål</th>':''}
-  </tr></thead><tbody>`;
+  const maxPts=Math.max(...scored.map(e=>e.total),1);
+  const barH=300;
+  const barW=Math.max(44,Math.min(80,Math.floor(700/scored.length)-10));
+  const gap=10;
+  const chartW=Math.max(700,scored.length*(barW+gap)+70);
+  const labelH=65;
+  const svgH=barH+labelH+50;
+
+  let svg=`<svg viewBox="0 0 ${chartW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:${chartW}px;font-family:system-ui,sans-serif">`;
+  for(let i=0;i<=4;i++){
+    const y=30+barH-(barH*i/4);
+    const val=Math.round(maxPts*i/4);
+    svg+=`<line x1="40" y1="${y}" x2="${chartW-10}" y2="${y}" stroke="#e5e5e5" stroke-width="1"/>`;
+    svg+=`<text x="35" y="${y+4}" text-anchor="end" font-size="11" fill="#888">${val}</text>`;
+  }
+
+  scored.forEach((e,idx)=>{
+    const x=50+idx*(barW+gap);
+    let yBottom=30+barH;
+    const total=e.total||0;
+    segments.forEach(seg=>{
+      const val=e.det[seg.key]||0;
+      if(val<=0)return;
+      const h=Math.round((val/maxPts)*barH);
+      const y=yBottom-h;
+      svg+=`<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${seg.color}" rx="2"/>`;
+      if(h>14)svg+=`<text x="${x+barW/2}" y="${y+h/2+4}" text-anchor="middle" font-size="10" fill="white" font-weight="600">${val}</text>`;
+      yBottom=y;
+    });
+    if(total>0){
+      const topY=30+barH-Math.round((total/maxPts)*barH)-7;
+      svg+=`<text x="${x+barW/2}" y="${topY}" text-anchor="middle" font-size="12" fill="#333" font-weight="700">${total}p</text>`;
+    }
+    const rankColors=['#f9a825','#90a4ae','#a1664a'];
+    if(idx<3){
+      svg+=`<circle cx="${x+barW/2}" cy="${30+barH+18}" r="10" fill="${rankColors[idx]}"/>`;
+      svg+=`<text x="${x+barW/2}" y="${30+barH+23}" text-anchor="middle" font-size="10" fill="white" font-weight="700">${idx+1}</text>`;
+    } else {
+      svg+=`<text x="${x+barW/2}" y="${30+barH+23}" text-anchor="middle" font-size="11" fill="#888">${idx+1}</text>`;
+    }
+    const namn=e.namn||'';
+    const delar=namn.split(' ');
+    const fornamn=delar[0]||'';
+    const efternamn=delar.slice(1).join(' ');
+    svg+=`<text x="${x+barW/2}" y="${30+barH+40}" text-anchor="middle" font-size="11" fill="#333" font-weight="500">${fornamn}</text>`;
+    if(efternamn)svg+=`<text x="${x+barW/2}" y="${30+barH+54}" text-anchor="middle" font-size="10" fill="#666">${efternamn}</text>`;
+  });
+  svg+=`</svg>`;
+  cw.innerHTML=svg;
+
+  const activeSeg=segments.filter(s=>scored.some(e=>(e.det[s.key]||0)>0));
+  lg.innerHTML=activeSeg.map(s=>`<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:${s.color}"></span>${s.label}</div>`).join('');
+
+  let thtml=`<table class="stbl"><thead><tr><th>#</th><th>Namn</th><th>Totalt</th><th>Gruppspel</th>`;
+  if(phase>=2)thtml+=`<th>KF</th><th>SF</th><th>Final</th><th>Mästare</th>`;
+  if(phase>=3)thtml+=`<th>Skytt</th><th>Mål</th>`;
+  thtml+=`</tr></thead><tbody>`;
   scored.forEach((e,idx)=>{
     const rc=idx===0?'r1':idx===1?'r2':idx===2?'r3':'';
-    html+=`<tr>
-      <td><span class="rank ${rc}">${idx+1}</span></td>
-      <td>${e.namn}</td>
-      <td><span class="pts">${e.total}p</span></td>
-      ${phase>=1?`<td class="breakdown">${e.det.gr}p</td>`:''}
-      ${phase>=2?`<td class="breakdown">${e.det.qf}p</td><td class="breakdown">${e.det.sf}p</td><td class="breakdown">${e.det.fin}p</td><td class="breakdown">${e.det.win}p</td>`:''}
-      ${phase>=3?`<td class="breakdown">${e.det.skytt}p</td><td class="breakdown">${e.det.mal}p</td>`:''}
-    </tr>`;
+    thtml+=`<tr><td><span class="rank ${rc}">${idx+1}</span></td><td>${e.namn}</td><td><span class="pts">${e.total}p</span></td><td class="breakdown">${e.det.gr}p</td>`;
+    if(phase>=2)thtml+=`<td class="breakdown">${e.det.qf}p</td><td class="breakdown">${e.det.sf}p</td><td class="breakdown">${e.det.fin}p</td><td class="breakdown">${e.det.win}p</td>`;
+    if(phase>=3)thtml+=`<td class="breakdown">${e.det.skytt}p</td><td class="breakdown">${e.det.mal}p</td>`;
+    thtml+=`</tr>`;
   });
-  html+=`</tbody></table>`;
-  w.innerHTML=html;
+  thtml+=`</tbody></table>`;
+  tw.innerHTML=thtml;
 }
-
 function renderAdmGroups(){
   const c=document.getElementById('adm-groups');c.innerHTML='';
   GROUPS.forEach(g=>{
@@ -651,6 +718,146 @@ async function rensaTips(){
     await saveToDB();
     renderAdmEntries();
   }
+}
+
+function renderMalstat(){
+  const w=document.getElementById('malstat-wrap');
+  const gissningar=entries.map(e=>parseInt(e.mal)).filter(v=>!isNaN(v)&&v>0).sort((a,b)=>a-b);
+  const faktiskt=results.mal?parseInt(results.mal):null;
+
+  if(!gissningar.length){w.innerHTML='<p class="no-entries">Inga tips inlämnade ännu.</p>';return;}
+
+  const n=gissningar.length;
+  const sum=gissningar.reduce((a,b)=>a+b,0);
+  const medel=Math.round(sum/n);
+  const median=n%2===0?(gissningar[n/2-1]+gissningar[n/2])/2:gissningar[Math.floor(n/2)];
+  const freq={};gissningar.forEach(v=>{freq[v]=(freq[v]||0)+1;});
+  const maxFreq=Math.max(...Object.values(freq));
+  const typvarden=Object.keys(freq).filter(k=>freq[k]===maxFreq).map(Number);
+  const typvarde=typvarden.length===1?typvarden[0]:null;
+  const min=gissningar[0];const max=gissningar[n-1];
+  const spridning=max-min;
+  const stddev=Math.round(Math.sqrt(gissningar.reduce((a,v)=>a+(v-medel)**2,0)/n));
+
+  const avstand=faktiskt!==null?Math.abs(faktiskt-medel):null;
+
+  let html=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:1.5rem">`;
+  const kort=[
+    {label:'Antal gissningar',val:n,color:'#333',bg:'#f8f9fa'},
+    {label:'Medelvärde',val:medel+' mål',color:'#1a73e8',bg:'#e8f0fe'},
+    {label:'Medianvärde',val:median+' mål',color:'#34a853',bg:'#e6f4ea'},
+    {label:'Typvärde',val:typvarde!==null?typvarde+' mål':'Flera',color:'#9334e6',bg:'#f3e8fd'},
+    {label:'Spridning',val:min+'–'+max+' mål',color:'#e37400',bg:'#fef3e2'},
+    {label:'Standardavvikelse',val:'±'+stddev+' mål',color:'#e53935',bg:'#fce4e4'},
+  ];
+  if(faktiskt!==null){
+    kort.push({label:'Verkligt antal mål',val:faktiskt+' mål',color:'#f9a825',bg:'#fffde7'});
+    kort.push({label:'Avstånd medel–verkligt',val:avstand+' mål',color:avstand===0?'#34a853':'#e53935',bg:avstand===0?'#e6f4ea':'#fce4e4'});
+  }
+  kort.forEach(k=>{
+    html+=`<div style="background:${k.bg};border-radius:10px;padding:.875rem 1rem">
+      <div style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">${k.label}</div>
+      <div style="font-size:20px;font-weight:700;color:${k.color}">${k.val}</div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  // Prickdiagram
+  const allVals=[...gissningar];
+  if(faktiskt!==null)allVals.push(faktiskt);
+  const chartMin=Math.min(...allVals)-10;
+  const chartMax=Math.max(...allVals)+10;
+  const range=chartMax-chartMin||1;
+  const svgW=700;const svgH=200;
+  const toX=v=>Math.round(40+((v-chartMin)/range)*(svgW-80));
+
+  let svg=`<div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem">
+    <div style="font-size:14px;font-weight:600;margin-bottom:1rem;color:#333">Fördelning av gissningar</div>
+    <svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;overflow:visible">`;
+
+  // Spridningsband
+  svg+=`<rect x="${toX(min)}" y="60" width="${toX(max)-toX(min)}" height="40" fill="#f1f3f4" rx="4"/>`;
+
+  // Axel
+  svg+=`<line x1="40" y1="100" x2="${svgW-40}" y2="100" stroke="#ddd" stroke-width="1"/>`;
+
+  // Tick marks
+  const step=Math.ceil(range/8/5)*5||1;
+  for(let v=Math.ceil(chartMin/step)*step;v<=chartMax;v+=step){
+    const x=toX(v);
+    svg+=`<line x1="${x}" y1="98" x2="${x}" y2="102" stroke="#bbb" stroke-width="1"/>`;
+    svg+=`<text x="${x}" y="115" text-anchor="middle" font-size="10" fill="#888">${v}</text>`;
+  }
+
+  // Prickar för varje gissning
+  const jitter={};
+  gissningar.forEach(v=>{
+    jitter[v]=(jitter[v]||0)+1;
+    const x=toX(v);
+    const y=80-(jitter[v]-1)*14;
+    svg+=`<circle cx="${x}" cy="${y}" r="5" fill="#1a73e8" opacity="0.7"/>`;
+  });
+
+  // Medelvärde
+  const mx=toX(medel);
+  svg+=`<line x1="${mx}" y1="55" x2="${mx}" y2="130" stroke="#1a73e8" stroke-width="2" stroke-dasharray="4,3"/>`;
+  svg+=`<text x="${mx}" y="48" text-anchor="middle" font-size="11" fill="#1a73e8" font-weight="600">Medel: ${medel}</text>`;
+
+  // Median
+  const mdx=toX(median);
+  svg+=`<line x1="${mdx}" y1="55" x2="${mdx}" y2="130" stroke="#34a853" stroke-width="2" stroke-dasharray="4,3"/>`;
+  svg+=`<text x="${mdx}" y="140" text-anchor="middle" font-size="11" fill="#34a853" font-weight="600">Median: ${median}</text>`;
+
+  // Typvärde
+  if(typvarde!==null){
+    const tx=toX(typvarde);
+    svg+=`<line x1="${tx}" y1="55" x2="${tx}" y2="130" stroke="#9334e6" stroke-width="2" stroke-dasharray="4,3"/>`;
+    svg+=`<text x="${tx}" y="155" text-anchor="middle" font-size="11" fill="#9334e6" font-weight="600">Typvärde: ${typvarde}</text>`;
+  }
+
+  // Faktiskt värde
+  if(faktiskt!==null){
+    const fx=toX(faktiskt);
+    svg+=`<line x1="${fx}" y1="45" x2="${fx}" y2="130" stroke="#f9a825" stroke-width="3"/>`;
+    svg+=`<circle cx="${fx}" cy="45" r="7" fill="#f9a825"/>`;
+    svg+=`<text x="${fx}" y="38" text-anchor="middle" font-size="12" fill="#e37400" font-weight="700">Verkligt: ${faktiskt}</text>`;
+    // Avståndspil
+    if(avstand>0){
+      const ax1=Math.min(mx,fx);const ax2=Math.max(mx,fx);
+      svg+=`<line x1="${ax1}" y1="165" x2="${ax2}" y2="165" stroke="#e53935" stroke-width="1.5" marker-end="url(#arr)"/>`;
+      svg+=`<text x="${(ax1+ax2)/2}" y="178" text-anchor="middle" font-size="11" fill="#e53935">Avstånd: ${avstand} mål</text>`;
+    } else {
+      svg+=`<text x="${fx}" y="178" text-anchor="middle" font-size="12" fill="#34a853" font-weight="700">Medel = Verkligt!</text>`;
+    }
+  }
+
+  svg+=`</svg></div>`;
+
+  // Histogram
+  const binSize=5;
+  const bins={};
+  gissningar.forEach(v=>{const b=Math.floor(v/binSize)*binSize;bins[b]=(bins[b]||0)+1;});
+  const binKeys=Object.keys(bins).map(Number).sort((a,b)=>a-b);
+  const maxBin=Math.max(...Object.values(bins));
+  const hsvgW=700;const hsvgH=150;
+  const hbarW=Math.max(8,Math.floor((hsvgW-80)/binKeys.length)-2);
+
+  let hsvg=`<div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem">
+    <div style="font-size:14px;font-weight:600;margin-bottom:1rem;color:#333">Histogram (intervall om 5 mål)</div>
+    <svg viewBox="0 0 ${hsvgW} ${hsvgH}" style="width:100%">`;
+
+  binKeys.forEach((b,i)=>{
+    const cnt=bins[b];
+    const bh=Math.round((cnt/maxBin)*(hsvgH-40));
+    const bx=40+i*(hbarW+2);
+    const by=hsvgH-20-bh;
+    hsvg+=`<rect x="${bx}" y="${by}" width="${hbarW}" height="${bh}" fill="#1a73e8" opacity="0.75" rx="2"/>`;
+    if(cnt>0)hsvg+=`<text x="${bx+hbarW/2}" y="${by-3}" text-anchor="middle" font-size="9" fill="#555">${cnt}</text>`;
+    hsvg+=`<text x="${bx+hbarW/2}" y="${hsvgH-5}" text-anchor="middle" font-size="9" fill="#888">${b}</text>`;
+  });
+  hsvg+=`</svg></div>`;
+
+  w.innerHTML=html+svg+hsvg;
 }
 
 buildGroups();
