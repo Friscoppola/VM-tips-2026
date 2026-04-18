@@ -7,16 +7,16 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f3;color:#1a1a1a;font-size:15px;line-height:1.5}
-.app{max-width:780px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.app{max-width:800px;margin:0 auto;padding:1.5rem 1rem 4rem}
 h1{font-size:22px;font-weight:600;margin-bottom:4px}
 .subtitle{font-size:14px;color:#666;margin-bottom:1.5rem}
-.tabs{display:flex;gap:0;border-bottom:1px solid #ddd;margin-bottom:1.5rem}
-.tab{padding:9px 18px;font-size:14px;background:none;border:none;border-bottom:2px solid transparent;color:#666;cursor:pointer;margin-bottom:-1px;font-family:inherit}
+.tabs{display:flex;gap:0;border-bottom:1px solid #ddd;margin-bottom:1.5rem;overflow-x:auto}
+.tab{padding:9px 16px;font-size:13px;background:none;border:none;border-bottom:2px solid transparent;color:#666;cursor:pointer;margin-bottom:-1px;font-family:inherit;white-space:nowrap}
 .tab:hover{color:#333}
 .tab.active{border-bottom-color:#1a73e8;color:#1a73e8;font-weight:500}
 .view{display:none}.view.active{display:block}
-.stepper{display:flex;overflow-x:auto;margin-bottom:1.5rem;background:#fff;border-radius:10px;border:1px solid #e5e5e5;padding:0}
-.sbtn{flex:1;min-width:56px;padding:10px 4px;font-size:11px;text-align:center;background:none;border:none;border-bottom:3px solid transparent;color:#888;cursor:default;font-family:inherit}
+.stepper{display:flex;overflow-x:auto;margin-bottom:1.5rem;background:#fff;border-radius:10px;border:1px solid #e5e5e5}
+.sbtn{flex:1;min-width:50px;padding:8px 3px;font-size:10px;text-align:center;background:none;border:none;border-bottom:3px solid transparent;color:#888;cursor:default;font-family:inherit}
 .sbtn.done{border-bottom-color:#34a853;color:#1e7e34;cursor:pointer}
 .sbtn.active{border-bottom-color:#1a73e8;color:#1a73e8;font-weight:600}
 .step{display:none}.step.on{display:block}
@@ -29,10 +29,11 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px}
 .gl{font-size:12px;font-weight:600;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .gbadge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#e8f0fe;color:#1a73e8;font-size:11px;font-weight:700}
 .pr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.pr label{font-size:12px;color:#666;min-width:36px}
+.pr label{font-size:12px;color:#666;min-width:40px}
 .pr select{flex:1;font-size:13px;padding:5px 8px;border:1px solid #ddd;border-radius:7px;background:#fff;font-family:inherit}
 .pr select.s1{border-color:#34a853}
 .pr select.s2{border-color:#1a73e8}
+.pr select.s3{border-color:#e37400}
 .match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:1.25rem}
 .match-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:.875rem 1rem}
 .match-card.err{border-color:#e53935}
@@ -55,27 +56,21 @@ button.danger:hover{background:#fce4e4}
 .fl{margin-bottom:1.25rem}
 .fl label{font-size:13px;color:#555;display:block;margin-bottom:5px;font-weight:500}
 .fl input{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;width:100%;max-width:320px}
-.fl input:focus{outline:none;border-color:#1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.15)}
 .sumwrap{background:#f8f9fa;border:1px solid #e5e5e5;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem}
 .ssec{margin-bottom:.875rem}
 .ssec h3{font-size:11px;font-weight:600;color:#888;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-.spicks{display:flex;flex-wrap:wrap;gap:5px}
-.pk{font-size:12px;padding:3px 9px;border-radius:20px;font-weight:500}
-.pk.b{background:#e8f0fe;color:#1557b0}
-.pk.g{background:#e6f4ea;color:#1e7e34}
-.pk.a{background:#fef3e2;color:#e37400}
 .sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:3px}
 .sr{font-size:13px;color:#666}.sr span{color:#333;font-weight:500}
 .stbl-wrap{overflow-x:auto}
-.stbl{width:100%;border-collapse:collapse;font-size:14px;min-width:400px}
-.stbl th{font-size:12px;font-weight:600;color:#666;text-align:left;padding:8px 10px;border-bottom:2px solid #e5e5e5;white-space:nowrap}
-.stbl td{padding:10px 10px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:middle}
+.stbl{width:100%;border-collapse:collapse;font-size:13px;min-width:400px}
+.stbl th{font-size:11px;font-weight:600;color:#666;text-align:left;padding:6px 8px;border-bottom:2px solid #e5e5e5;white-space:nowrap}
+.stbl td{padding:8px 8px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:middle}
 .stbl tr:last-child td{border-bottom:none}
 .stbl tbody tr:hover td{background:#fafafa}
 .rank{font-weight:700;font-size:14px}
 .rank.r1{color:#f9a825}.rank.r2{color:#90a4ae}.rank.r3{color:#a1664a}
-.pts{font-weight:700;font-size:16px;color:#1a73e8}
-.breakdown{font-size:12px;color:#888}
+.pts{font-weight:700;font-size:15px;color:#1a73e8}
+.breakdown{font-size:11px;color:#888}
 .phase-badge{display:inline-block;font-size:12px;padding:4px 12px;border-radius:20px;margin-bottom:1rem;font-weight:500}
 .phase-badge.p1{background:#e8f0fe;color:#1557b0}
 .phase-badge.p2{background:#e6f4ea;color:#1e7e34}
@@ -88,7 +83,7 @@ button.danger:hover{background:#fce4e4}
 .adm-gc{background:#f8f9fa;border:1px solid #e5e5e5;border-radius:8px;padding:.75rem 1rem}
 .adm-gl{font-size:12px;font-weight:600;color:#666;margin-bottom:6px}
 .adm-pr{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12px}
-.adm-pr label{min-width:36px;color:#666}
+.adm-pr label{min-width:40px;color:#666}
 .adm-pr select{flex:1;font-size:12px;padding:4px 7px;border:1px solid #ddd;border-radius:6px;font-family:inherit}
 .adm-match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin-bottom:.75rem}
 .adm-match{background:#f8f9fa;border:1px solid #e5e5e5;border-radius:8px;padding:.75rem 1rem}
@@ -120,7 +115,7 @@ button.danger:hover{background:#fce4e4}
   <div class="tabs">
     <button class="tab active" onclick="showView('tips',this)">Mitt tips</button>
     <button class="tab" onclick="showView('stallning',this)">Ställning</button>
-    <button class="tab" onclick="showView('malstat',this)">M&#xe5lstatistik</button>
+    <button class="tab" onclick="showView('malstat',this)">Målstatistik</button>
     <button class="tab" onclick="showView('admin',this)">Admin</button>
   </div>
 
@@ -129,72 +124,86 @@ button.danger:hover{background:#fce4e4}
     <div id="s0" class="step on card">
       <div class="ptitle">Välkommen!</div>
       <div class="psub">Fyll i ditt namn för att starta tipset</div>
-      <div class="fl"><label for="namn">Ditt namn</label><input type="text" id="namn" placeholder="Förnamn Efternamn" autocomplete="off"/></div>
+      <div class="fl"><label>Ditt namn</label><input type="text" id="namn" placeholder="Förnamn Efternamn" autocomplete="off"/></div>
       <div class="em" id="e0">Ange ditt namn.</div>
       <div class="nav"><button class="primary" onclick="nx(0)">Starta tipset &rarr;</button></div>
     </div>
     <div id="s1" class="step card">
       <div class="ptitle">Steg 1 – Gruppspelet</div>
-      <div class="psub">Välj etta och tvåa i varje grupp (A–L). Poäng: 1p per rätt lag i topp-2, +1p bonus för rätt etta.</div>
+      <div class="psub">Välj etta, tvåa OCH trea i varje grupp (A–L). 1p per rätt lag.</div>
       <div class="gg" id="ggrids"></div>
-      <div class="em" id="e1">Fyll i alla 12 grupper. Etta och tvåa får inte vara samma lag.</div>
+      <div class="em" id="e1">Fyll i alla 12 grupper. Inga dubletter inom samma grupp.</div>
       <div class="nav"><button onclick="pv(1)">&larr; Tillbaka</button><button class="primary" onclick="nx(1)">Nästa &rarr;</button></div>
     </div>
     <div id="s2" class="step card">
-      <div class="ptitle">Steg 2 – Kvartsfinaler</div>
-      <div class="psub">Gissa vilka lag som möter varandra i de 4 kvartsfinalmatcherna. (2p per rätt lag)</div>
-      <div class="match-grid" id="qf-matches"></div>
-      <div class="em" id="e2">Fyll i alla kvartsfinaler. Inga dubletter tillåtna.</div>
+      <div class="ptitle">Steg 2 – Sextondelsfinal</div>
+      <div class="psub">16 matcher. Välj lag från de 36 lagen du tippade i gruppspelet. (2p per rätt lag)</div>
+      <div class="match-grid" id="s16-matches"></div>
+      <div class="em" id="e2">Fyll i alla 16 matcher. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(2)">&larr; Tillbaka</button><button class="primary" onclick="nx(2)">Nästa &rarr;</button></div>
     </div>
     <div id="s3" class="step card">
-      <div class="ptitle">Steg 3 – Semifinaler</div>
-      <div class="psub">Vilka lag går vidare till semifinal? Välj bland lagen du tippade i kvartsfinalen. (3p per rätt lag)</div>
-      <div class="match-grid" id="sf-matches"></div>
-      <div class="em" id="e3">Fyll i båda semifinalerna. Inga dubletter tillåtna.</div>
+      <div class="ptitle">Steg 3 – Åttondelsfinal</div>
+      <div class="psub">8 matcher. Väljer bland de 32 lag du tippade i sextondelsfinalen. (3p per rätt lag)</div>
+      <div class="match-grid" id="s8-matches"></div>
+      <div class="em" id="e3">Fyll i alla 8 matcher. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
     </div>
     <div id="s4" class="step card">
-      <div class="ptitle">Steg 4 – Finalen</div>
-      <div class="psub">Vilka två lag möts i finalen? Välj bland lagen du tippade i semifinalen. (4p per rätt lag)</div>
-      <div class="match-grid" id="fin-match"></div>
-      <div class="em" id="e4">Välj de två finallagen. De får inte vara samma lag.</div>
+      <div class="ptitle">Steg 4 – Kvartsfinaler</div>
+      <div class="psub">4 matcher. Väljer bland de 16 lag från åttondelsfinalen. (4p per rätt lag)</div>
+      <div class="match-grid" id="qf-matches"></div>
+      <div class="em" id="e4">Fyll i alla 4 matcher. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(4)">&larr; Tillbaka</button><button class="primary" onclick="nx(4)">Nästa &rarr;</button></div>
     </div>
     <div id="s5" class="step card">
-      <div class="ptitle">Steg 5 – VM-mästare</div>
-      <div class="psub">Vilket av finallagen vinner VM? (6p för rätt)</div>
-      <div class="rg" id="wing"></div>
-      <div class="em" id="e5">Välj ett lag.</div>
+      <div class="ptitle">Steg 5 – Semifinaler</div>
+      <div class="psub">2 matcher. Väljer bland de 8 lag från kvartsfinalen. (5p per rätt lag)</div>
+      <div class="match-grid" id="sf-matches"></div>
+      <div class="em" id="e5">Fyll i båda semifinalerna. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(5)">&larr; Tillbaka</button><button class="primary" onclick="nx(5)">Nästa &rarr;</button></div>
     </div>
     <div id="s6" class="step card">
-      <div class="ptitle">Steg 6 – Sveriges placering</div>
-      <div class="psub">Hur långt tar sig Sverige i turneringen?</div>
-      <div class="rg" id="sve-grid"></div>
-      <div class="em" id="e6">Välj ett alternativ.</div>
+      <div class="ptitle">Steg 6 – Finalen</div>
+      <div class="psub">Vilka två lag möts i finalen? Väljer bland de 4 lag från semifinalen. (6p per rätt lag)</div>
+      <div class="match-grid" id="fin-match"></div>
+      <div class="em" id="e6">Välj de två finallagen. De får inte vara samma lag.</div>
       <div class="nav"><button onclick="pv(6)">&larr; Tillbaka</button><button class="primary" onclick="nx(6)">Nästa &rarr;</button></div>
     </div>
     <div id="s7" class="step card">
-      <div class="ptitle">Steg 7 – Skyttekung</div>
-      <div class="psub">Vilken spelare vinner skytteligan? (10p för rätt, måste stava rätt)</div>
-      <div class="fl"><label for="skytt">Spelarens namn</label><input type="text" id="skytt" placeholder="t.ex. Kylian Mbappé" autocomplete="off"/></div>
-      <div class="em" id="e7">Ange en spelare.</div>
+      <div class="ptitle">Steg 7 – VM-mästare</div>
+      <div class="psub">Vilket av finallagen vinner VM? (10p för rätt)</div>
+      <div class="rg" id="wing"></div>
+      <div class="em" id="e7">Välj ett lag.</div>
       <div class="nav"><button onclick="pv(7)">&larr; Tillbaka</button><button class="primary" onclick="nx(7)">Nästa &rarr;</button></div>
     </div>
     <div id="s8" class="step card">
-      <div class="ptitle">Steg 8 – Antal mål</div>
-      <div class="psub">Hur många mål görs totalt? Närmaste gissning vinner (5p exakt, 3p inom ±5, 1p inom ±10).</div>
-      <div class="fl"><label for="mal">Antal mål</label><input type="number" id="mal" placeholder="t.ex. 260" min="50" max="600" style="max-width:160px"/></div>
-      <div style="font-size:12px;color:#888;margin-top:4px">Tips: VM 2022 gav 172 mål på 64 matcher. VM 2026 har 104 matcher.</div>
-      <div class="em" id="e8">Ange ett tal mellan 50 och 600.</div>
+      <div class="ptitle">Steg 8 – Sveriges placering</div>
+      <div class="psub">Hur långt tar sig Sverige i turneringen? (10p för rätt)</div>
+      <div class="rg" id="sve-grid"></div>
+      <div class="em" id="e8">Välj ett alternativ.</div>
       <div class="nav"><button onclick="pv(8)">&larr; Tillbaka</button><button class="primary" onclick="nx(8)">Nästa &rarr;</button></div>
     </div>
     <div id="s9" class="step card">
+      <div class="ptitle">Steg 9 – Skyttekung</div>
+      <div class="psub">Vilken spelare vinner skytteligan? (5p för rätt, måste stava rätt)</div>
+      <div class="fl"><label>Spelarens namn</label><input type="text" id="skytt" placeholder="t.ex. Kylian Mbappé" autocomplete="off"/></div>
+      <div class="em" id="e9">Ange en spelare.</div>
+      <div class="nav"><button onclick="pv(9)">&larr; Tillbaka</button><button class="primary" onclick="nx(9)">Nästa &rarr;</button></div>
+    </div>
+    <div id="s10" class="step card">
+      <div class="ptitle">Steg 10 – Antal mål</div>
+      <div class="psub">Hur många mål görs totalt? Närmaste gissning vinner (5p exakt, 3p inom ±5, 1p inom ±10).</div>
+      <div class="fl"><label>Antal mål</label><input type="number" id="mal" placeholder="t.ex. 260" min="50" max="600" style="max-width:160px"/></div>
+      <div style="font-size:12px;color:#888;margin-top:4px">Tips: VM 2022 gav 172 mål på 64 matcher. VM 2026 har 104 matcher.</div>
+      <div class="em" id="e10">Ange ett tal mellan 50 och 600.</div>
+      <div class="nav"><button onclick="pv(10)">&larr; Tillbaka</button><button class="primary" onclick="nx(10)">Nästa &rarr;</button></div>
+    </div>
+    <div id="s11" class="step card">
       <div class="ptitle">Bekräfta ditt tips</div>
       <div class="psub">Kontrollera ditt tips och skicka in.</div>
       <div class="sumwrap" id="sumwrap"></div>
-      <div class="nav"><button onclick="pv(9)">&larr; Ändra</button><button class="primary" onclick="submit()">Skicka in tips &rarr;</button></div>
+      <div class="nav"><button onclick="pv(11)">&larr; Ändra</button><button class="primary" onclick="submit()">Skicka in tips &rarr;</button></div>
       <div class="success-msg" id="ok-msg">Ditt tips är inskickat! Tack!</div>
     </div>
   </div>
@@ -228,9 +237,13 @@ button.danger:hover{background:#fce4e4}
     </div>
     <div class="adm-sec">
       <h3>Fas 2 – Slutspelsresultat</h3>
-      <div style="font-size:13px;font-weight:600;color:#555;margin-bottom:.5rem">Kvartsfinaler</div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin-bottom:.5rem">Sextondelsfinal (16 matcher)</div>
+      <div class="adm-match-grid" id="adm-s16"></div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Åttondelsfinal (8 matcher)</div>
+      <div class="adm-match-grid" id="adm-s8"></div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Kvartsfinaler (4 matcher)</div>
       <div class="adm-match-grid" id="adm-qf"></div>
-      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Semifinaler</div>
+      <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Semifinaler (2 matcher)</div>
       <div class="adm-match-grid" id="adm-sf"></div>
       <div style="font-size:13px;font-weight:600;color:#555;margin:.75rem 0 .5rem">Final</div>
       <div class="adm-match-grid" id="adm-fin"></div>
@@ -268,14 +281,25 @@ const GROUPS=[
   {l:"L",t:["England","Kroatien","Panama","Ghana"]}
 ];
 const ALL=GROUPS.flatMap(g=>g.t).sort((a,b)=>a.localeCompare(b,'sv'));
-const SLABELS=["Namn","Grupper","Kvartsfinaler","Semifinaler","Final","Mästare","Sverige","Skyttekung","Antal mål","Bekräfta"];
-const TOTAL=10;
+const SLABELS=["Namn","Gruppspel","Sextondelsfinal","Åttondelsfinal","Kvartsfinal","Semifinal","Final","Mästare","Sverige","Skyttekung","Antal mål","Bekräfta"];
+const TOTAL=12;
 const API_KEY="$2a$10$ePF.okCtymM./SQJgRDGFOsbG6w/LiBQ6Z6bn6SeaV1pOFq1bI8GW";
 const BIN_ID="69e209c5aaba8821970bf7e7";
 const API_URL=`https://api.jsonbin.io/v3/b/$69e209c5aaba8821970bf7e7`;
 
-let entries=[],results={gr:{},qf:[],sf:[],fin:{},win:'',skytt:'',mal:''},phase=1,cur=0;
-let tip={namn:'',gr:{},qf:[{l1:'',l2:''},{l1:'',l2:''},{l1:'',l2:''},{l1:'',l2:''}],sf:[{l1:'',l2:''},{l1:'',l2:''}],fin:{l1:'',l2:''},win:'',sve:'',skytt:'',mal:''};
+function emptyTip(){
+  return {
+    namn:'',gr:{},
+    s16:Array.from({length:16},()=>({l1:'',l2:''})),
+    s8:Array.from({length:8},()=>({l1:'',l2:''})),
+    qf:Array.from({length:4},()=>({l1:'',l2:''})),
+    sf:Array.from({length:2},()=>({l1:'',l2:''})),
+    fin:{l1:'',l2:''},win:'',sve:'',skytt:'',mal:''
+  };
+}
+
+let entries=[],results={gr:{},s16:[],s8:[],qf:[],sf:[],fin:{},win:'',skytt:'',mal:''},phase=1,cur=0;
+let tip=emptyTip();
 
 async function loadFromDB(){
   try{
@@ -283,19 +307,14 @@ async function loadFromDB(){
     const d=await r.json();
     const rec=d.record;
     entries=rec.entries||[];
-    results=rec.results||{gr:{},qf:[],sf:[],fin:{},win:'',skytt:'',mal:''};
+    results=rec.results||{gr:{},s16:[],s8:[],qf:[],sf:[],fin:{},win:'',skytt:'',mal:''};
     phase=rec.phase||1;
   }catch(e){console.error('Load error:',e);}
 }
 
 async function saveToDB(){
   try{
-    const data={entries,results,phase};
-    await fetch(API_URL,{
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},
-      body:JSON.stringify(data)
-    });
+    await fetch(API_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify({entries,results,phase})});
   }catch(e){console.error('Save error:',e);}
 }
 
@@ -304,9 +323,9 @@ function showView(v,btn){
   document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
   document.getElementById('v-'+v).classList.add('active');
   if(btn)btn.classList.add('active');
-  if(v==='stallning'){loadFromDB().then(()=>renderStallning());}
-  if(v==='malstat'){loadFromDB().then(()=>renderMalstat());}
-  if(v==='admin'){loadFromDB().then(()=>{renderAdmGroups();renderAdmSlutspel();renderAdmEntries();updatePhaseBtns();});}
+  if(v==='stallning')loadFromDB().then(()=>renderStallning());
+  if(v==='malstat')loadFromDB().then(()=>renderMalstat());
+  if(v==='admin')loadFromDB().then(()=>{renderAdmGroups();renderAdmSlutspel();renderAdmEntries();updatePhaseBtns();});
 }
 
 function buildStepper(){
@@ -320,37 +339,46 @@ function buildStepper(){
   });
 }
 
+function getGrTeams(){
+  const t=[];
+  GROUPS.forEach(g=>{
+    const p=tip.gr[g.l];
+    if(p){if(p.e)t.push(p.e);if(p.t2)t.push(p.t2);if(p.t3)t.push(p.t3);}
+  });
+  return [...new Set(t)].sort((a,b)=>a.localeCompare(b,'sv'));
+}
+function getMatchTeams(arr){
+  const t=arr.flatMap(m=>[m.l1,m.l2]).filter(Boolean);
+  return [...new Set(t)].sort((a,b)=>a.localeCompare(b,'sv'));
+}
+
 function goTo(n){
   document.querySelectorAll('.step').forEach(el=>el.classList.remove('on'));
   document.getElementById('s'+n).classList.add('on');
   cur=n;buildStepper();
-  if(n===2)buildMatchGrid('qf-matches','qf',ALL,4);
-  if(n===3){const qfTeams=getQFTeams();buildMatchGrid('sf-matches','sf',qfTeams,2);}
-  if(n===4){const sfTeams=getSFTeams();buildMatchGrid('fin-match','fin',sfTeams,1);}
-  if(n===5)buildWin();
-  if(n===6)buildSveGrid();
-  if(n===9)buildSum();
+  if(n===2)buildMatchGrid('s16-matches','s16',getGrTeams(),16);
+  if(n===3)buildMatchGrid('s8-matches','s8',getMatchTeams(tip.s16),8);
+  if(n===4)buildMatchGrid('qf-matches','qf',getMatchTeams(tip.s8),4);
+  if(n===5)buildMatchGrid('sf-matches','sf',getMatchTeams(tip.qf),2);
+  if(n===6)buildMatchGrid('fin-match','fin',getMatchTeams(tip.sf),1);
+  if(n===7)buildWin();
+  if(n===8)buildSveGrid();
+  if(n===11)buildSum();
 }
 
-function getQFTeams(){
-  const teams=[];
-  tip.qf.forEach(m=>{if(m.l1)teams.push(m.l1);if(m.l2)teams.push(m.l2);});
-  return [...new Set(teams)].sort((a,b)=>a.localeCompare(b,'sv'));
-}
-function getSFTeams(){
-  const teams=[];
-  tip.sf.forEach(m=>{if(m.l1)teams.push(m.l1);if(m.l2)teams.push(m.l2);});
-  return [...new Set(teams)].sort((a,b)=>a.localeCompare(b,'sv'));
-}
+function nx(from){if(!valid(from))return;saveStep(from);goTo(from+1);}
+function pv(from){goTo(from-1);}
 
 function buildMatchGrid(gridId,key,teamPool,count){
   const g=document.getElementById(gridId);g.innerHTML='';
-  const matches=key==='fin'?[tip.fin]:tip[key];
+  if(!teamPool.length){g.innerHTML='<div style="font-size:13px;color:#888">Fyll i föregående steg först.</div>';return;}
+  const arr=key==='fin'?[tip.fin]:tip[key];
   for(let i=0;i<count;i++){
-    const match=matches[i]||{l1:'',l2:''};
+    const match=arr[i]||{l1:'',l2:''};
     const d=document.createElement('div');d.className='match-card';d.id='mc-'+key+'-'+i;
     const opts=['<option value="">— välj lag —</option>',...teamPool.map(t=>`<option value="${t}">${t}</option>`)].join('');
-    d.innerHTML=`<div class="match-label">${key==='fin'?'Final':key==='sf'?'Semifinal '+(i+1):'Kvartsfinal '+(i+1)}</div>
+    const lbl=key==='fin'?'Final':key==='sf'?'Semifinal '+(i+1):key==='qf'?'Kvartsfinal '+(i+1):key==='s8'?'Åttondelsfinal '+(i+1):'Sextondelsfinal '+(i+1);
+    d.innerHTML=`<div class="match-label">${lbl}</div>
       <div class="match-vs">
         <select id="${key}-${i}-l1" onchange="syncMatch('${key}',${i})">${opts}</select>
         <span class="vs">vs</span>
@@ -365,8 +393,8 @@ function buildMatchGrid(gridId,key,teamPool,count){
 function syncMatch(key,i){
   const l1=document.getElementById(key+'-'+i+'-l1').value;
   const l2=document.getElementById(key+'-'+i+'-l2').value;
-  if(key==='fin'){tip.fin={l1,l2};}
-  else{tip[key][i]={l1,l2};}
+  if(key==='fin')tip.fin={l1,l2};
+  else tip[key][i]={l1,l2};
 }
 
 function buildWin(){
@@ -383,17 +411,13 @@ function buildWin(){
 
 function buildSveGrid(){
   const g=document.getElementById('sve-grid');g.innerHTML='';
-  const opts=['Gruppspelet','Åttondelsfinal','Kvartsfinal','Semifinal','Fyra','Trea','Tvåa','Vinnare'];
-  opts.forEach(t=>{
+  ['Gruppspelet','Åttondelsfinal','Kvartsfinal','Semifinal','Fyra','Trea','Tvåa','Vinnare'].forEach(t=>{
     const d=document.createElement('div');d.className='ri'+(tip.sve===t?' sel':'');
     d.textContent=t;
     d.onclick=()=>{tip.sve=t;g.querySelectorAll('.ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
     g.appendChild(d);
   });
 }
-
-function nx(from){if(!valid(from))return;saveStep(from);goTo(from+1);}
-function pv(from){goTo(from-1);}
 
 function valid(s){
   const hide=id=>{const e=document.getElementById(id);if(e)e.style.display='none';};
@@ -403,46 +427,39 @@ function valid(s){
   if(s===1){
     let ok=true;
     GROUPS.forEach(g=>{
-      const a=document.getElementById('ea-'+g.l),b=document.getElementById('eb-'+g.l);
+      const p=tip.gr[g.l]||{};
+      const vals=[p.e,p.t2,p.t3].filter(Boolean);
       const gc=document.getElementById('gc-'+g.l);
-      if(!a.value||!b.value||a.value===b.value){gc.classList.add('err');ok=false;}
-      else gc.classList.remove('err');
+      if(vals.length<3||new Set(vals).size!==3){if(gc)gc.classList.add('err');ok=false;}
+      else{if(gc)gc.classList.remove('err');}
     });
     if(!ok){show('e1');return false;}
   }
-  if(s===2){
-    const allTeams=[];let ok=true;
-    tip.qf.forEach((m,i)=>{
-      const mc=document.getElementById('mc-qf-'+i);
+  const matchKeys={2:'s16',3:'s8',4:'qf',5:'sf'};
+  if(matchKeys[s]){
+    const key=matchKeys[s];
+    const arr=tip[key];
+    const allT=[];let ok=true;
+    arr.forEach((m,i)=>{
+      const mc=document.getElementById('mc-'+key+'-'+i);
       if(!m.l1||!m.l2||m.l1===m.l2){if(mc)mc.classList.add('err');ok=false;}
-      else{if(mc)mc.classList.remove('err');allTeams.push(m.l1,m.l2);}
+      else{if(mc)mc.classList.remove('err');allT.push(m.l1,m.l2);}
     });
-    if(!ok){show('e2');return false;}
-    if(new Set(allTeams).size!==allTeams.length){show('e2');return false;}
+    if(!ok){show('e'+s);return false;}
+    if(new Set(allT).size!==allT.length){show('e'+s);return false;}
   }
-  if(s===3){
-    const allTeams=[];let ok=true;
-    tip.sf.forEach((m,i)=>{
-      const mc=document.getElementById('mc-sf-'+i);
-      if(!m.l1||!m.l2||m.l1===m.l2){if(mc)mc.classList.add('err');ok=false;}
-      else{if(mc)mc.classList.remove('err');allTeams.push(m.l1,m.l2);}
-    });
-    if(!ok){show('e3');return false;}
-    if(new Set(allTeams).size!==allTeams.length){show('e3');return false;}
-  }
-  if(s===4&&(!tip.fin.l1||!tip.fin.l2||tip.fin.l1===tip.fin.l2)){show('e4');return false;}
-  if(s===5&&!tip.win){show('e5');return false;}
-  if(s===6&&!tip.sve){show('e6');return false;}
-  if(s===7&&!document.getElementById('skytt').value.trim()){show('e7');return false;}
-  if(s===8){const v=parseInt(document.getElementById('mal').value);if(isNaN(v)||v<50||v>600){show('e8');return false;}}
+  if(s===6&&(!tip.fin.l1||!tip.fin.l2||tip.fin.l1===tip.fin.l2)){show('e6');return false;}
+  if(s===7&&!tip.win){show('e7');return false;}
+  if(s===8&&!tip.sve){show('e8');return false;}
+  if(s===9&&!document.getElementById('skytt').value.trim()){show('e9');return false;}
+  if(s===10){const v=parseInt(document.getElementById('mal').value);if(isNaN(v)||v<50||v>600){show('e10');return false;}}
   return true;
 }
 
 function saveStep(s){
   if(s===0)tip.namn=document.getElementById('namn').value.trim();
-  if(s===1){tip.gr={};GROUPS.forEach(g=>{tip.gr[g.l]={e:document.getElementById('ea-'+g.l).value,t:document.getElementById('eb-'+g.l).value};});}
-  if(s===7)tip.skytt=document.getElementById('skytt').value.trim();
-  if(s===8)tip.mal=document.getElementById('mal').value;
+  if(s===9)tip.skytt=document.getElementById('skytt').value.trim();
+  if(s===10)tip.mal=document.getElementById('mal').value;
 }
 
 function buildGroups(){
@@ -451,22 +468,35 @@ function buildGroups(){
     const d=document.createElement('div');d.className='gc';d.id='gc-'+g.l;
     const o=g.t.map(t=>`<option value="${t}">${t}</option>`).join('');
     d.innerHTML=`<div class="gl"><span class="gbadge">${g.l}</span>Grupp ${g.l}</div>
-      <div class="pr"><label>Etta</label><select class="s1" id="ea-${g.l}"><option value="">— välj —</option>${o}</select></div>
-      <div class="pr"><label>Tvåa</label><select class="s2" id="eb-${g.l}"><option value="">— välj —</option>${o}</select></div>`;
+      <div class="pr"><label>Etta</label><select class="s1" id="ea-${g.l}" onchange="syncGr('${g.l}')"><option value="">— välj —</option>${o}</select></div>
+      <div class="pr"><label>Tvåa</label><select class="s2" id="eb-${g.l}" onchange="syncGr('${g.l}')"><option value="">— välj —</option>${o}</select></div>
+      <div class="pr"><label>Trea</label><select class="s3" id="ec-${g.l}" onchange="syncGr('${g.l}')"><option value="">— välj —</option>${o}</select></div>`;
     c.appendChild(d);
   });
 }
 
+function syncGr(l){
+  tip.gr[l]={
+    e:document.getElementById('ea-'+l).value,
+    t2:document.getElementById('eb-'+l).value,
+    t3:document.getElementById('ec-'+l).value
+  };
+}
+
 function buildSum(){
   const w=document.getElementById('sumwrap');
-  const gr=GROUPS.map(g=>{const p=tip.gr[g.l];return`<div class="sr">G${g.l}: <span>${p?p.e:'?'}</span> / <span>${p?p.t:'?'}</span></div>`;}).join('');
-  const qfHtml=tip.qf.map((m,i)=>`<div class="sr">KF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
-  const sfHtml=tip.sf.map((m,i)=>`<div class="sr">SF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+  const gr=GROUPS.map(g=>{const p=tip.gr[g.l];return`<div class="sr">G${g.l}: <span>${p?.e||'?'}</span> / <span>${p?.t2||'?'}</span> / <span>${p?.t3||'?'}</span></div>`;}).join('');
+  const s16h=tip.s16.map((m,i)=>`<div class="sr">S16-${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+  const s8h=tip.s8.map((m,i)=>`<div class="sr">S8-${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+  const qfh=tip.qf.map((m,i)=>`<div class="sr">KF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+  const sfh=tip.sf.map((m,i)=>`<div class="sr">SF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
   w.innerHTML=`
     <div class="ssec"><h3>Namn</h3><div style="font-size:15px;font-weight:600">${tip.namn}</div></div>
-    <div class="ssec"><h3>Grupper (etta / tvåa)</h3><div class="sgrid">${gr}</div></div>
-    <div class="ssec"><h3>Kvartsfinaler</h3><div class="sgrid">${qfHtml}</div></div>
-    <div class="ssec"><h3>Semifinaler</h3><div class="sgrid">${sfHtml}</div></div>
+    <div class="ssec"><h3>Gruppspel (1/2/3)</h3><div class="sgrid">${gr}</div></div>
+    <div class="ssec"><h3>Sextondelsfinal</h3><div class="sgrid">${s16h}</div></div>
+    <div class="ssec"><h3>Åttondelsfinal</h3><div class="sgrid">${s8h}</div></div>
+    <div class="ssec"><h3>Kvartsfinaler</h3><div class="sgrid">${qfh}</div></div>
+    <div class="ssec"><h3>Semifinaler</h3><div class="sgrid">${sfh}</div></div>
     <div class="ssec"><h3>Final</h3><div class="sr"><span>${tip.fin.l1||'?'}</span> vs <span>${tip.fin.l2||'?'}</span></div></div>
     <div class="ssec"><h3>Mästare</h3><div style="font-size:15px;font-weight:600;color:#1e7e34">${tip.win||'–'}</div></div>
     <div class="ssec"><h3>Sveriges placering</h3><div style="font-size:14px">${tip.sve||'–'}</div></div>
@@ -475,51 +505,56 @@ function buildSum(){
 }
 
 async function submit(){
-  const btn=document.querySelector('#s9 button.primary');
+  const btn=document.querySelector('#s11 button.primary');
   btn.textContent='Skickar...';btn.disabled=true;
   await loadFromDB();
-  entries.push({namn:tip.namn,gr:{...tip.gr},qf:JSON.parse(JSON.stringify(tip.qf)),sf:JSON.parse(JSON.stringify(tip.sf)),fin:{...tip.fin},win:tip.win,sve:tip.sve,skytt:tip.skytt,mal:tip.mal,ts:new Date().toLocaleString('sv-SE')});
+  entries.push({...tip,gr:{...tip.gr},s16:JSON.parse(JSON.stringify(tip.s16)),s8:JSON.parse(JSON.stringify(tip.s8)),qf:JSON.parse(JSON.stringify(tip.qf)),sf:JSON.parse(JSON.stringify(tip.sf)),fin:{...tip.fin},ts:new Date().toLocaleString('sv-SE')});
   await saveToDB();
-  const ok=document.getElementById('ok-msg');ok.style.display='block';
+  document.getElementById('ok-msg').style.display='block';
   btn.textContent='Skicka in tips →';btn.disabled=false;
-  setTimeout(()=>ok.style.display='none',4000);
-  tip={namn:'',gr:{},qf:[{l1:'',l2:''},{l1:'',l2:''},{l1:'',l2:''},{l1:'',l2:''}],sf:[{l1:'',l2:''},{l1:'',l2:''}],fin:{l1:'',l2:''},win:'',sve:'',skytt:'',mal:''};
+  setTimeout(()=>document.getElementById('ok-msg').style.display='none',4000);
+  tip=emptyTip();
   document.getElementById('namn').value='';
   document.getElementById('skytt').value='';
   document.getElementById('mal').value='';
-  buildGroups();
-  goTo(0);
+  buildGroups();goTo(0);
 }
 
 function calcScore(e,ph){
-  let p=0,det={gr:0,qf:0,sf:0,fin:0,win:0,skytt:0,mal:0};
+  let p=0,det={gr:0,s16:0,s8:0,qf:0,sf:0,fin:0,win:0,sve:0,skytt:0,mal:0};
   if(ph>=1&&results.gr){
     GROUPS.forEach(g=>{
       const rg=results.gr[g.l],eg=e.gr&&e.gr[g.l];
       if(!rg||!eg)return;
-      const rTop=[rg.e,rg.t].filter(Boolean);
-      const eTop=[eg.e,eg.t].filter(Boolean);
-      let pts=0;
-      eTop.forEach(t=>{if(rTop.includes(t))pts+=1;});
-      if(rg.e&&eg.e===rg.e)pts+=1;
-      det.gr+=pts;p+=pts;
+      const rTop=[rg.e,rg.t2,rg.t3].filter(Boolean);
+      const eTop=[eg.e,eg.t2,eg.t3].filter(Boolean);
+      eTop.forEach(t=>{if(rTop.includes(t)){det.gr+=1;p+=1;}});
     });
   }
   if(ph>=2){
-    const rqfTeams=(results.qf||[]).flatMap(m=>[m.l1,m.l2]).filter(Boolean);
-    const eqfTeams=(e.qf||[]).flatMap(m=>[m.l1,m.l2]).filter(Boolean);
-    eqfTeams.forEach(t=>{if(rqfTeams.includes(t)){det.qf+=2;p+=2;}});
-    const rsfTeams=(results.sf||[]).flatMap(m=>[m.l1,m.l2]).filter(Boolean);
-    const esfTeams=(e.sf||[]).flatMap(m=>[m.l1,m.l2]).filter(Boolean);
-    esfTeams.forEach(t=>{if(rsfTeams.includes(t)){det.sf+=3;p+=3;}});
-    const rfinTeams=[results.fin&&results.fin.l1,results.fin&&results.fin.l2].filter(Boolean);
-    const efinTeams=[e.fin&&e.fin.l1,e.fin&&e.fin.l2].filter(Boolean);
-    efinTeams.forEach(t=>{if(rfinTeams.includes(t)){det.fin+=4;p+=4;}});
-    if(e.win&&e.win===results.win){det.win+=6;p+=6;}
+    const score=(resArr,tipArr,pts,key)=>{
+      const rt=(resArr||[]).flatMap(m=>[m.l1,m.l2]).filter(Boolean);
+      const et=(tipArr||[]).flatMap(m=>[m.l1,m.l2]).filter(Boolean);
+      et.forEach(t=>{if(rt.includes(t)){det[key]+=pts;p+=pts;}});
+    };
+    score(results.s16,e.s16,2,'s16');
+    score(results.s8,e.s8,3,'s8');
+    score(results.qf,e.qf,4,'qf');
+    score(results.sf,e.sf,5,'sf');
+    const rft=[results.fin?.l1,results.fin?.l2].filter(Boolean);
+    const eft=[e.fin?.l1,e.fin?.l2].filter(Boolean);
+    eft.forEach(t=>{if(rft.includes(t)){det.fin+=6;p+=6;}});
+    if(e.win&&e.win===results.win){det.win+=10;p+=10;}
   }
   if(ph>=3){
-    if(e.skytt&&results.skytt&&e.skytt.toLowerCase()===results.skytt.toLowerCase()){det.skytt+=10;p+=10;}
-    if(e.mal&&results.mal){const diff=Math.abs(parseInt(e.mal)-parseInt(results.mal));if(diff===0){det.mal+=5;p+=5;}else if(diff<=5){det.mal+=3;p+=3;}else if(diff<=10){det.mal+=1;p+=1;}}
+    if(e.skytt&&results.skytt&&e.skytt.toLowerCase()===results.skytt.toLowerCase()){det.skytt+=5;p+=5;}
+    if(e.mal&&results.mal){
+      const diff=Math.abs(parseInt(e.mal)-parseInt(results.mal));
+      if(diff===0){det.mal+=5;p+=5;}
+      else if(diff<=5){det.mal+=3;p+=3;}
+      else if(diff<=10){det.mal+=1;p+=1;}
+    }
+    if(e.sve&&results.sve&&e.sve===results.sve){det.sve+=10;p+=10;}
   }
   return{total:p,det};
 }
@@ -536,26 +571,28 @@ function renderStallning(){
 
   const segments=[
     {key:'gr',label:'Gruppspel',color:'#34a853'},
-    {key:'qf',label:'Kvartsfinaler',color:'#1a73e8'},
-    {key:'sf',label:'Semifinaler',color:'#9334e6'},
-    {key:'fin',label:'Final',color:'#e37400'},
+    {key:'s16',label:'Sextondelsfinal',color:'#00acc1'},
+    {key:'s8',label:'Åttondelsfinal',color:'#1a73e8'},
+    {key:'qf',label:'Kvartsfinal',color:'#9334e6'},
+    {key:'sf',label:'Semifinal',color:'#e37400'},
+    {key:'fin',label:'Final',color:'#e53935'},
     {key:'win',label:'Mästare',color:'#f9a825'},
-    {key:'skytt',label:'Skyttekung',color:'#e53935'},
-    {key:'mal',label:'Antal mål',color:'#00acc1'}
+    {key:'sve',label:'Sverige',color:'#1e7e34'},
+    {key:'skytt',label:'Skyttekung',color:'#c62828'},
+    {key:'mal',label:'Antal mål',color:'#5c6bc0'}
   ];
 
   const scored=entries.map((e,i)=>{return{...e,i,...calcScore(e,phase)}}).sort((a,b)=>b.total-a.total);
   const maxPts=Math.max(...scored.map(e=>e.total),1);
   const barH=300;
-  const barW=Math.max(44,Math.min(80,Math.floor(700/scored.length)-10));
-  const gap=10;
+  const barW=Math.max(36,Math.min(72,Math.floor(700/scored.length)-8));
+  const gap=8;
   const chartW=Math.max(700,scored.length*(barW+gap)+70);
-  const labelH=65;
-  const svgH=barH+labelH+50;
+  const svgH=barH+80;
 
   let svg=`<svg viewBox="0 0 ${chartW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:${chartW}px;font-family:system-ui,sans-serif">`;
   for(let i=0;i<=4;i++){
-    const y=30+barH-(barH*i/4);
+    const y=25+barH-(barH*i/4);
     const val=Math.round(maxPts*i/4);
     svg+=`<line x1="40" y1="${y}" x2="${chartW-10}" y2="${y}" stroke="#e5e5e5" stroke-width="1"/>`;
     svg+=`<text x="35" y="${y+4}" text-anchor="end" font-size="11" fill="#888">${val}</text>`;
@@ -563,7 +600,7 @@ function renderStallning(){
 
   scored.forEach((e,idx)=>{
     const x=50+idx*(barW+gap);
-    let yBottom=30+barH;
+    let yBottom=25+barH;
     const total=e.total||0;
     segments.forEach(seg=>{
       const val=e.det[seg.key]||0;
@@ -575,22 +612,20 @@ function renderStallning(){
       yBottom=y;
     });
     if(total>0){
-      const topY=30+barH-Math.round((total/maxPts)*barH)-7;
-      svg+=`<text x="${x+barW/2}" y="${topY}" text-anchor="middle" font-size="12" fill="#333" font-weight="700">${total}p</text>`;
+      const topY=25+barH-Math.round((total/maxPts)*barH)-7;
+      svg+=`<text x="${x+barW/2}" y="${topY}" text-anchor="middle" font-size="11" fill="#333" font-weight="700">${total}p</text>`;
     }
     const rankColors=['#f9a825','#90a4ae','#a1664a'];
     if(idx<3){
-      svg+=`<circle cx="${x+barW/2}" cy="${30+barH+18}" r="10" fill="${rankColors[idx]}"/>`;
-      svg+=`<text x="${x+barW/2}" y="${30+barH+23}" text-anchor="middle" font-size="10" fill="white" font-weight="700">${idx+1}</text>`;
+      svg+=`<circle cx="${x+barW/2}" cy="${25+barH+16}" r="9" fill="${rankColors[idx]}"/>`;
+      svg+=`<text x="${x+barW/2}" y="${25+barH+21}" text-anchor="middle" font-size="9" fill="white" font-weight="700">${idx+1}</text>`;
     } else {
-      svg+=`<text x="${x+barW/2}" y="${30+barH+23}" text-anchor="middle" font-size="11" fill="#888">${idx+1}</text>`;
+      svg+=`<text x="${x+barW/2}" y="${25+barH+20}" text-anchor="middle" font-size="10" fill="#888">${idx+1}</text>`;
     }
     const namn=e.namn||'';
     const delar=namn.split(' ');
-    const fornamn=delar[0]||'';
-    const efternamn=delar.slice(1).join(' ');
-    svg+=`<text x="${x+barW/2}" y="${30+barH+40}" text-anchor="middle" font-size="11" fill="#333" font-weight="500">${fornamn}</text>`;
-    if(efternamn)svg+=`<text x="${x+barW/2}" y="${30+barH+54}" text-anchor="middle" font-size="10" fill="#666">${efternamn}</text>`;
+    svg+=`<text x="${x+barW/2}" y="${25+barH+36}" text-anchor="middle" font-size="10" fill="#333" font-weight="500">${delar[0]||''}</text>`;
+    if(delar[1])svg+=`<text x="${x+barW/2}" y="${25+barH+49}" text-anchor="middle" font-size="9" fill="#666">${delar.slice(1).join(' ')}</text>`;
   });
   svg+=`</svg>`;
   cw.innerHTML=svg;
@@ -598,135 +633,26 @@ function renderStallning(){
   const activeSeg=segments.filter(s=>scored.some(e=>(e.det[s.key]||0)>0));
   lg.innerHTML=activeSeg.map(s=>`<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#555"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:${s.color}"></span>${s.label}</div>`).join('');
 
-  let thtml=`<table class="stbl"><thead><tr><th>#</th><th>Namn</th><th>Totalt</th><th>Gruppspel</th>`;
-  if(phase>=2)thtml+=`<th>KF</th><th>SF</th><th>Final</th><th>Mästare</th>`;
-  if(phase>=3)thtml+=`<th>Skytt</th><th>Mål</th>`;
-  thtml+=`</tr></thead><tbody>`;
+  let th=`<table class="stbl"><thead><tr><th>#</th><th>Namn</th><th>Totalt</th><th>Gr</th>`;
+  if(phase>=2)th+=`<th>S16</th><th>S8</th><th>KF</th><th>SF</th><th>Fin</th><th>Mäst</th>`;
+  if(phase>=3)th+=`<th>Sve</th><th>Skytt</th><th>Mål</th>`;
+  th+=`</tr></thead><tbody>`;
   scored.forEach((e,idx)=>{
     const rc=idx===0?'r1':idx===1?'r2':idx===2?'r3':'';
-    thtml+=`<tr><td><span class="rank ${rc}">${idx+1}</span></td><td>${e.namn}</td><td><span class="pts">${e.total}p</span></td><td class="breakdown">${e.det.gr}p</td>`;
-    if(phase>=2)thtml+=`<td class="breakdown">${e.det.qf}p</td><td class="breakdown">${e.det.sf}p</td><td class="breakdown">${e.det.fin}p</td><td class="breakdown">${e.det.win}p</td>`;
-    if(phase>=3)thtml+=`<td class="breakdown">${e.det.skytt}p</td><td class="breakdown">${e.det.mal}p</td>`;
-    thtml+=`</tr>`;
+    th+=`<tr><td><span class="rank ${rc}">${idx+1}</span></td><td>${e.namn}</td><td><span class="pts">${e.total}p</span></td><td class="breakdown">${e.det.gr}p</td>`;
+    if(phase>=2)th+=`<td class="breakdown">${e.det.s16}p</td><td class="breakdown">${e.det.s8}p</td><td class="breakdown">${e.det.qf}p</td><td class="breakdown">${e.det.sf}p</td><td class="breakdown">${e.det.fin}p</td><td class="breakdown">${e.det.win}p</td>`;
+    if(phase>=3)th+=`<td class="breakdown">${e.det.sve}p</td><td class="breakdown">${e.det.skytt}p</td><td class="breakdown">${e.det.mal}p</td>`;
+    th+=`</tr>`;
   });
-  thtml+=`</tbody></table>`;
-  tw.innerHTML=thtml;
-}
-function renderAdmGroups(){
-  const c=document.getElementById('adm-groups');c.innerHTML='';
-  GROUPS.forEach(g=>{
-    const rg=(results.gr&&results.gr[g.l])||{e:'',t:''};
-    const o=g.t.map(t=>`<option value="${t}"${rg.e===t?' selected':''}>${t}</option>`).join('');
-    const o2=g.t.map(t=>`<option value="${t}"${rg.t===t?' selected':''}>${t}</option>`).join('');
-    const d=document.createElement('div');d.className='adm-gc';
-    d.innerHTML=`<div class="adm-gl">Grupp ${g.l}</div>
-      <div class="adm-pr"><label>Etta</label><select id="ra-${g.l}"><option value="">—</option>${o}</select></div>
-      <div class="adm-pr"><label>Tvåa</label><select id="rb-${g.l}"><option value="">—</option>${o2}</select></div>`;
-    c.appendChild(d);
-  });
-}
-
-function renderAdmSlutspel(){
-  const rqf=results.qf&&results.qf.length?results.qf:[{l1:'',l2:''},{l1:'',l2:''},{l1:'',l2:''},{l1:'',l2:''}];
-  const rsf=results.sf&&results.sf.length?results.sf:[{l1:'',l2:''},{l1:'',l2:''}];
-  const rfin=results.fin||{l1:'',l2:''};
-  const buildAdmMatch=(containerId,matches,label)=>{
-    const c=document.getElementById(containerId);c.innerHTML='';
-    matches.forEach((m,i)=>{
-      const opts=['<option value="">— välj —</option>',...ALL.map(t=>`<option value="${t}">${t}</option>`)].join('');
-      const d=document.createElement('div');d.className='adm-match';
-      d.innerHTML=`<div class="adm-match-label">${label} ${matches.length>1?i+1:''}</div>
-        <div class="adm-match-vs">
-          <select id="adm-${containerId}-${i}-l1">${opts}</select>
-          <span class="vs">vs</span>
-          <select id="adm-${containerId}-${i}-l2">${opts}</select>
-        </div>`;
-      c.appendChild(d);
-      if(m.l1)document.getElementById('adm-'+containerId+'-'+i+'-l1').value=m.l1;
-      if(m.l2)document.getElementById('adm-'+containerId+'-'+i+'-l2').value=m.l2;
-    });
-  };
-  buildAdmMatch('adm-qf',rqf,'Kvartsfinal');
-  buildAdmMatch('adm-sf',rsf,'Semifinal');
-  buildAdmMatch('adm-fin',[rfin],'Final');
-  const wc=document.getElementById('adm-win');wc.innerHTML='';
-  ALL.forEach(t=>{
-    const d=document.createElement('div');
-    d.className='adm-ri'+(results.win===t?' sel':'');
-    d.textContent=t;
-    d.onclick=()=>{results.win=t;wc.querySelectorAll('.adm-ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
-    wc.appendChild(d);
-  });
-  if(results.skytt)document.getElementById('adm-skytt').value=results.skytt;
-  if(results.mal)document.getElementById('adm-mal').value=results.mal;
-}
-
-async function saveAdmin(){
-  if(!results.gr)results.gr={};
-  GROUPS.forEach(g=>{
-    results.gr[g.l]={e:document.getElementById('ra-'+g.l).value,t:document.getElementById('rb-'+g.l).value};
-  });
-  results.qf=[0,1,2,3].map(i=>{
-    const l1=document.getElementById('adm-adm-qf-'+i+'-l1');
-    const l2=document.getElementById('adm-adm-qf-'+i+'-l2');
-    return{l1:l1?l1.value:'',l2:l2?l2.value:''};
-  });
-  results.sf=[0,1].map(i=>{
-    const l1=document.getElementById('adm-adm-sf-'+i+'-l1');
-    const l2=document.getElementById('adm-adm-sf-'+i+'-l2');
-    return{l1:l1?l1.value:'',l2:l2?l2.value:''};
-  });
-  const fl1=document.getElementById('adm-adm-fin-0-l1');
-  const fl2=document.getElementById('adm-adm-fin-0-l2');
-  results.fin={l1:fl1?fl1.value:'',l2:fl2?fl2.value:''};
-  results.skytt=document.getElementById('adm-skytt').value.trim();
-  results.mal=document.getElementById('adm-mal').value;
-  await saveToDB();
-  const ok=document.getElementById('adm-ok');ok.style.display='block';
-  setTimeout(()=>ok.style.display='none',2500);
-}
-
-async function setPhase(p){
-  phase=p;
-  await saveToDB();
-  updatePhaseBtns();
-}
-function updatePhaseBtns(){[1,2,3].forEach(i=>{const b=document.getElementById('pb'+i);if(b)b.classList.toggle('ap',phase===i);});}
-
-function renderAdmEntries(){
-  const el=document.getElementById('adm-entries');
-  document.getElementById('entry-count').textContent=entries.length;
-  if(!entries.length){el.innerHTML='<p style="font-size:13px;color:#888">Inga tips ännu.</p>';return;}
-  el.innerHTML=entries.map((e,i)=>`
-    <div class="adm-entry-row">
-      <span style="font-weight:500">${e.namn}</span>
-      <span style="color:#888;font-size:12px">${e.ts}</span>
-      <button class="danger" onclick="delEntry(${i})">Ta bort</button>
-    </div>`).join('');
-}
-
-async function delEntry(i){
-  if(confirm('Ta bort tipset för '+entries[i].namn+'?')){
-    entries.splice(i,1);
-    await saveToDB();
-    renderAdmEntries();
-  }
-}
-async function rensaTips(){
-  if(confirm('Är du säker? Alla tips raderas permanent.')){
-    entries=[];
-    await saveToDB();
-    renderAdmEntries();
-  }
+  th+=`</tbody></table>`;
+  tw.innerHTML=th;
 }
 
 function renderMalstat(){
   const w=document.getElementById('malstat-wrap');
   const gissningar=entries.map(e=>parseInt(e.mal)).filter(v=>!isNaN(v)&&v>0).sort((a,b)=>a-b);
   const faktiskt=results.mal?parseInt(results.mal):null;
-
   if(!gissningar.length){w.innerHTML='<p class="no-entries">Inga tips inlämnade ännu.</p>';return;}
-
   const n=gissningar.length;
   const sum=gissningar.reduce((a,b)=>a+b,0);
   const medel=Math.round(sum/n);
@@ -735,16 +661,14 @@ function renderMalstat(){
   const maxFreq=Math.max(...Object.values(freq));
   const typvarden=Object.keys(freq).filter(k=>freq[k]===maxFreq).map(Number);
   const typvarde=typvarden.length===1?typvarden[0]:null;
-  const min=gissningar[0];const max=gissningar[n-1];
-  const spridning=max-min;
+  const min=gissningar[0],max=gissningar[n-1];
   const stddev=Math.round(Math.sqrt(gissningar.reduce((a,v)=>a+(v-medel)**2,0)/n));
-
   const avstand=faktiskt!==null?Math.abs(faktiskt-medel):null;
 
   let html=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:1.5rem">`;
   const kort=[
     {label:'Antal gissningar',val:n,color:'#333',bg:'#f8f9fa'},
-    {label:'Medelvärde',val:medel+' mål',color:'#1a73e8',bg:'#e8f0fe'},
+    {label:'Medelärde',val:medel+' mål',color:'#1a73e8',bg:'#e8f0fe'},
     {label:'Medianvärde',val:median+' mål',color:'#34a853',bg:'#e6f4ea'},
     {label:'Typvärde',val:typvarde!==null?typvarde+' mål':'Flera',color:'#9334e6',bg:'#f3e8fd'},
     {label:'Spridning',val:min+'–'+max+' mål',color:'#e37400',bg:'#fef3e2'},
@@ -762,102 +686,178 @@ function renderMalstat(){
   });
   html+=`</div>`;
 
-  // Prickdiagram
   const allVals=[...gissningar];
   if(faktiskt!==null)allVals.push(faktiskt);
-  const chartMin=Math.min(...allVals)-10;
-  const chartMax=Math.max(...allVals)+10;
+  const chartMin=Math.min(...allVals)-10,chartMax=Math.max(...allVals)+10;
   const range=chartMax-chartMin||1;
-  const svgW=700;const svgH=200;
+  const svgW=700,svgH=200;
   const toX=v=>Math.round(40+((v-chartMin)/range)*(svgW-80));
 
   let svg=`<div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem">
     <div style="font-size:14px;font-weight:600;margin-bottom:1rem;color:#333">Fördelning av gissningar</div>
     <svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;overflow:visible">`;
-
-  // Spridningsband
   svg+=`<rect x="${toX(min)}" y="60" width="${toX(max)-toX(min)}" height="40" fill="#f1f3f4" rx="4"/>`;
-
-  // Axel
   svg+=`<line x1="40" y1="100" x2="${svgW-40}" y2="100" stroke="#ddd" stroke-width="1"/>`;
-
-  // Tick marks
   const step=Math.ceil(range/8/5)*5||1;
   for(let v=Math.ceil(chartMin/step)*step;v<=chartMax;v+=step){
     const x=toX(v);
     svg+=`<line x1="${x}" y1="98" x2="${x}" y2="102" stroke="#bbb" stroke-width="1"/>`;
     svg+=`<text x="${x}" y="115" text-anchor="middle" font-size="10" fill="#888">${v}</text>`;
   }
-
-  // Prickar för varje gissning
   const jitter={};
   gissningar.forEach(v=>{
     jitter[v]=(jitter[v]||0)+1;
-    const x=toX(v);
-    const y=80-(jitter[v]-1)*14;
+    const x=toX(v),y=80-(jitter[v]-1)*14;
     svg+=`<circle cx="${x}" cy="${y}" r="5" fill="#1a73e8" opacity="0.7"/>`;
   });
-
-  // Medelvärde
   const mx=toX(medel);
-  svg+=`<line x1="${mx}" y1="55" x2="${mx}" y2="130" stroke="#1a73e8" stroke-width="2" stroke-dasharray="4,3"/>`;
-  svg+=`<text x="${mx}" y="48" text-anchor="middle" font-size="11" fill="#1a73e8" font-weight="600">Medel: ${medel}</text>`;
-
-  // Median
+  svg+=`<line x1="${mx}" y1="50" x2="${mx}" y2="130" stroke="#1a73e8" stroke-width="2" stroke-dasharray="4,3"/>`;
+  svg+=`<text x="${mx}" y="44" text-anchor="middle" font-size="11" fill="#1a73e8" font-weight="600">Medel: ${medel}</text>`;
   const mdx=toX(median);
-  svg+=`<line x1="${mdx}" y1="55" x2="${mdx}" y2="130" stroke="#34a853" stroke-width="2" stroke-dasharray="4,3"/>`;
-  svg+=`<text x="${mdx}" y="140" text-anchor="middle" font-size="11" fill="#34a853" font-weight="600">Median: ${median}</text>`;
-
-  // Typvärde
+  svg+=`<line x1="${mdx}" y1="50" x2="${mdx}" y2="130" stroke="#34a853" stroke-width="2" stroke-dasharray="4,3"/>`;
+  svg+=`<text x="${mdx}" y="142" text-anchor="middle" font-size="11" fill="#34a853" font-weight="600">Median: ${median}</text>`;
   if(typvarde!==null){
     const tx=toX(typvarde);
-    svg+=`<line x1="${tx}" y1="55" x2="${tx}" y2="130" stroke="#9334e6" stroke-width="2" stroke-dasharray="4,3"/>`;
-    svg+=`<text x="${tx}" y="155" text-anchor="middle" font-size="11" fill="#9334e6" font-weight="600">Typvärde: ${typvarde}</text>`;
+    svg+=`<line x1="${tx}" y1="50" x2="${tx}" y2="130" stroke="#9334e6" stroke-width="2" stroke-dasharray="4,3"/>`;
+    svg+=`<text x="${tx}" y="157" text-anchor="middle" font-size="11" fill="#9334e6" font-weight="600">Typvärde: ${typvarde}</text>`;
   }
-
-  // Faktiskt värde
   if(faktiskt!==null){
     const fx=toX(faktiskt);
-    svg+=`<line x1="${fx}" y1="45" x2="${fx}" y2="130" stroke="#f9a825" stroke-width="3"/>`;
-    svg+=`<circle cx="${fx}" cy="45" r="7" fill="#f9a825"/>`;
-    svg+=`<text x="${fx}" y="38" text-anchor="middle" font-size="12" fill="#e37400" font-weight="700">Verkligt: ${faktiskt}</text>`;
-    // Avståndspil
+    svg+=`<line x1="${fx}" y1="40" x2="${fx}" y2="130" stroke="#f9a825" stroke-width="3"/>`;
+    svg+=`<circle cx="${fx}" cy="40" r="7" fill="#f9a825"/>`;
+    svg+=`<text x="${fx}" y="33" text-anchor="middle" font-size="12" fill="#e37400" font-weight="700">Verkligt: ${faktiskt}</text>`;
     if(avstand>0){
-      const ax1=Math.min(mx,fx);const ax2=Math.max(mx,fx);
-      svg+=`<line x1="${ax1}" y1="165" x2="${ax2}" y2="165" stroke="#e53935" stroke-width="1.5" marker-end="url(#arr)"/>`;
+      const ax1=Math.min(mx,fx),ax2=Math.max(mx,fx);
+      svg+=`<line x1="${ax1}" y1="165" x2="${ax2}" y2="165" stroke="#e53935" stroke-width="1.5"/>`;
       svg+=`<text x="${(ax1+ax2)/2}" y="178" text-anchor="middle" font-size="11" fill="#e53935">Avstånd: ${avstand} mål</text>`;
     } else {
       svg+=`<text x="${fx}" y="178" text-anchor="middle" font-size="12" fill="#34a853" font-weight="700">Medel = Verkligt!</text>`;
     }
   }
-
   svg+=`</svg></div>`;
 
-  // Histogram
-  const binSize=5;
-  const bins={};
+  const binSize=5;const bins={};
   gissningar.forEach(v=>{const b=Math.floor(v/binSize)*binSize;bins[b]=(bins[b]||0)+1;});
   const binKeys=Object.keys(bins).map(Number).sort((a,b)=>a-b);
   const maxBin=Math.max(...Object.values(bins));
-  const hsvgW=700;const hsvgH=150;
+  const hsvgW=700,hsvgH=150;
   const hbarW=Math.max(8,Math.floor((hsvgW-80)/binKeys.length)-2);
-
-  let hsvg=`<div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem">
+  let hsvg=`<div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem">
     <div style="font-size:14px;font-weight:600;margin-bottom:1rem;color:#333">Histogram (intervall om 5 mål)</div>
     <svg viewBox="0 0 ${hsvgW} ${hsvgH}" style="width:100%">`;
-
   binKeys.forEach((b,i)=>{
-    const cnt=bins[b];
-    const bh=Math.round((cnt/maxBin)*(hsvgH-40));
-    const bx=40+i*(hbarW+2);
-    const by=hsvgH-20-bh;
+    const cnt=bins[b],bh=Math.round((cnt/maxBin)*(hsvgH-40));
+    const bx=40+i*(hbarW+2),by=hsvgH-20-bh;
     hsvg+=`<rect x="${bx}" y="${by}" width="${hbarW}" height="${bh}" fill="#1a73e8" opacity="0.75" rx="2"/>`;
     if(cnt>0)hsvg+=`<text x="${bx+hbarW/2}" y="${by-3}" text-anchor="middle" font-size="9" fill="#555">${cnt}</text>`;
     hsvg+=`<text x="${bx+hbarW/2}" y="${hsvgH-5}" text-anchor="middle" font-size="9" fill="#888">${b}</text>`;
   });
   hsvg+=`</svg></div>`;
-
   w.innerHTML=html+svg+hsvg;
+}
+
+function renderAdmGroups(){
+  const c=document.getElementById('adm-groups');c.innerHTML='';
+  GROUPS.forEach(g=>{
+    const rg=(results.gr&&results.gr[g.l])||{e:'',t2:'',t3:''};
+    const o=g.t.map(t=>`<option value="${t}"${rg.e===t?' selected':''}>${t}</option>`).join('');
+    const o2=g.t.map(t=>`<option value="${t}"${rg.t2===t?' selected':''}>${t}</option>`).join('');
+    const o3=g.t.map(t=>`<option value="${t}"${rg.t3===t?' selected':''}>${t}</option>`).join('');
+    const d=document.createElement('div');d.className='adm-gc';
+    d.innerHTML=`<div class="adm-gl">Grupp ${g.l}</div>
+      <div class="adm-pr"><label>Etta</label><select id="ra-${g.l}"><option value="">—</option>${o}</select></div>
+      <div class="adm-pr"><label>Tvåa</label><select id="rb-${g.l}"><option value="">—</option>${o2}</select></div>
+      <div class="adm-pr"><label>Trea</label><select id="rc-${g.l}"><option value="">—</option>${o3}</select></div>`;
+    c.appendChild(d);
+  });
+}
+
+function renderAdmSlutspel(){
+  const buildAdm=(cid,arr,label)=>{
+    const c=document.getElementById(cid);if(!c)return;c.innerHTML='';
+    arr.forEach((m,i)=>{
+      const opts=['<option value="">— välj —</option>',...ALL.map(t=>`<option value="${t}">${t}</option>`)].join('');
+      const d=document.createElement('div');d.className='adm-match';
+      d.innerHTML=`<div class="adm-match-label">${label} ${arr.length>1?i+1:''}</div>
+        <div class="adm-match-vs">
+          <select id="adm-${cid}-${i}-l1">${opts}</select>
+          <span class="vs">vs</span>
+          <select id="adm-${cid}-${i}-l2">${opts}</select>
+        </div>`;
+      c.appendChild(d);
+      const a=document.getElementById('adm-'+cid+'-'+i+'-l1');
+      const b=document.getElementById('adm-'+cid+'-'+i+'-l2');
+      if(a&&m.l1)a.value=m.l1;
+      if(b&&m.l2)b.value=m.l2;
+    });
+  };
+  const rs16=(results.s16&&results.s16.length)?results.s16:Array.from({length:16},()=>({l1:'',l2:''}));
+  const rs8=(results.s8&&results.s8.length)?results.s8:Array.from({length:8},()=>({l1:'',l2:''}));
+  const rqf=(results.qf&&results.qf.length)?results.qf:Array.from({length:4},()=>({l1:'',l2:''}));
+  const rsf=(results.sf&&results.sf.length)?results.sf:Array.from({length:2},()=>({l1:'',l2:''}));
+  const rfin=results.fin||{l1:'',l2:''};
+  buildAdm('adm-s16',rs16,'Sextondelsfinal');
+  buildAdm('adm-s8',rs8,'Åttondelsfinal');
+  buildAdm('adm-qf',rqf,'Kvartsfinal');
+  buildAdm('adm-sf',rsf,'Semifinal');
+  buildAdm('adm-fin',[rfin],'Final');
+  const wc=document.getElementById('adm-win');wc.innerHTML='';
+  ALL.forEach(t=>{
+    const d=document.createElement('div');d.className='adm-ri'+(results.win===t?' sel':'');
+    d.textContent=t;
+    d.onclick=()=>{results.win=t;wc.querySelectorAll('.adm-ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
+    wc.appendChild(d);
+  });
+  if(results.skytt)document.getElementById('adm-skytt').value=results.skytt;
+  if(results.mal)document.getElementById('adm-mal').value=results.mal;
+}
+
+async function saveAdmin(){
+  if(!results.gr)results.gr={};
+  GROUPS.forEach(g=>{
+    results.gr[g.l]={
+      e:document.getElementById('ra-'+g.l).value,
+      t2:document.getElementById('rb-'+g.l).value,
+      t3:document.getElementById('rc-'+g.l).value
+    };
+  });
+  const readAdm=(cid,count)=>Array.from({length:count},(_,i)=>{
+    const a=document.getElementById('adm-'+cid+'-'+i+'-l1');
+    const b=document.getElementById('adm-'+cid+'-'+i+'-l2');
+    return{l1:a?a.value:'',l2:b?b.value:''};
+  });
+  results.s16=readAdm('adm-s16',16);
+  results.s8=readAdm('adm-s8',8);
+  results.qf=readAdm('adm-qf',4);
+  results.sf=readAdm('adm-sf',2);
+  results.fin=readAdm('adm-fin',1)[0];
+  results.skytt=document.getElementById('adm-skytt').value.trim();
+  results.mal=document.getElementById('adm-mal').value;
+  await saveToDB();
+  const ok=document.getElementById('adm-ok');ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',2500);
+}
+
+async function setPhase(p){phase=p;await saveToDB();updatePhaseBtns();}
+function updatePhaseBtns(){[1,2,3].forEach(i=>{const b=document.getElementById('pb'+i);if(b)b.classList.toggle('ap',phase===i);});}
+
+function renderAdmEntries(){
+  const el=document.getElementById('adm-entries');
+  document.getElementById('entry-count').textContent=entries.length;
+  if(!entries.length){el.innerHTML='<p style="font-size:13px;color:#888">Inga tips ännu.</p>';return;}
+  el.innerHTML=entries.map((e,i)=>`
+    <div class="adm-entry-row">
+      <span style="font-weight:500">${e.namn}</span>
+      <span style="color:#888;font-size:12px">${e.ts}</span>
+      <button class="danger" onclick="delEntry(${i})">Ta bort</button>
+    </div>`).join('');
+}
+
+async function delEntry(i){
+  if(confirm('Ta bort tipset för '+entries[i].namn+'?')){entries.splice(i,1);await saveToDB();renderAdmEntries();}
+}
+async function rensaTips(){
+  if(confirm('Är du säker? Alla tips raderas permanent.')){entries=[];await saveToDB();renderAdmEntries();}
 }
 
 buildGroups();
