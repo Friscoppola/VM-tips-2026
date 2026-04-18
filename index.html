@@ -15,10 +15,7 @@ h1{font-size:22px;font-weight:600;margin-bottom:4px}
 .tab:hover{color:#333}
 .tab.active{border-bottom-color:#1a73e8;color:#1a73e8;font-weight:500}
 .view{display:none}.view.active{display:block}
-.stepper{display:flex;overflow-x:auto;margin-bottom:1.5rem;background:#fff;border-radius:10px;border:1px solid #e5e5e5}
-.sbtn{flex:1;min-width:50px;padding:8px 3px;font-size:10px;text-align:center;background:none;border:none;border-bottom:3px solid transparent;color:#888;cursor:default;font-family:inherit}
-.sbtn.done{border-bottom-color:#34a853;color:#1e7e34;cursor:pointer}
-.sbtn.active{border-bottom-color:#1a73e8;color:#1a73e8;font-weight:600}
+
 .step{display:none}.step.on{display:block}
 .card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem}
 .ptitle{font-size:18px;font-weight:600;margin-bottom:4px}
@@ -120,7 +117,16 @@ button.danger:hover{background:#fce4e4}
   </div>
 
   <div id="v-tips" class="view active">
-    <div class="stepper" id="stepper"></div>
+    <div style="background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:.875rem 1.25rem;margin-bottom:1.5rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span id="step-label" style="font-size:14px;font-weight:600;color:#1a73e8"></span>
+      <span id="step-counter" style="font-size:12px;color:#888"></span>
+    </div>
+    <div style="background:#e5e5e5;border-radius:10px;height:6px;overflow:hidden">
+      <div id="step-bar" style="height:100%;background:#1a73e8;border-radius:10px;transition:width .3s ease;width:0%"></div>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap" id="stepper"></div>
+  </div>
     <div id="s0" class="step on card">
       <div class="ptitle">Välkommen!</div>
       <div class="psub">Fyll i ditt namn för att starta tipset</div>
@@ -329,13 +335,21 @@ function showView(v,btn){
 }
 
 function buildStepper(){
-  const s=document.getElementById('stepper');s.innerHTML='';
+  const label=document.getElementById('step-label');
+  const counter=document.getElementById('step-counter');
+  const bar=document.getElementById('step-bar');
+  const s=document.getElementById('stepper');
+  if(label)label.textContent=SLABELS[cur]||'';
+  if(counter)counter.textContent='Steg '+(cur+1)+' av '+TOTAL;
+  if(bar)bar.style.width=Math.round((cur/(TOTAL-1))*100)+'%';
+  if(!s)return;
+  s.innerHTML='';
   SLABELS.forEach((l,i)=>{
-    const b=document.createElement('button');
-    b.className='sbtn'+(i===cur?' active':i<cur?' done':'');
-    b.textContent=l;
-    if(i<cur)b.onclick=()=>goTo(i);
-    s.appendChild(b);
+    const d=document.createElement('div');
+    d.style.cssText='width:18px;height:6px;border-radius:3px;cursor:'+(i<cur?'pointer':'default')+';background:'+(i===cur?'#1a73e8':i<cur?'#34a853':'#e5e5e5');
+    d.title=l;
+    if(i<cur)d.onclick=()=>goTo(i);
+    s.appendChild(d);
   });
 }
 
