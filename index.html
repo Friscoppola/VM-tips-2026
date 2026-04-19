@@ -155,57 +155,56 @@ button.danger:hover{background:#fce4e4}
       <div class="em" id="e3">Fyll i alla 4 matcher. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s4" class="step card">
       <div class="ptitle">Steg 5 – Semifinaler</div>
       <div class="psub">2 matcher. Väljer bland de 8 lag från kvartsfinalen. (5p per rätt lag)</div>
       <div class="match-grid" id="sf-matches"></div>
-      <div class="em" id="e3">Fyll i båda semifinalerna. Inga dubletter tillåtna.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="em" id="e4">Fyll i båda semifinalerna. Inga dubletter tillåtna.</div>
+      <div class="nav"><button onclick="pv(4)">&larr; Tillbaka</button><button class="primary" onclick="nx(4)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s5" class="step card">
       <div class="ptitle">Steg 6 – Finalen</div>
       <div class="psub">Vilka två lag möts i finalen? Väljer bland de 4 lag från semifinalen. (6p per rätt lag)</div>
       <div class="match-grid" id="fin-match"></div>
-      <div class="em" id="e3">Välj de två finallagen. De får inte vara samma lag.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="em" id="e5">Välj de två finallagen. De får inte vara samma lag.</div>
+      <div class="nav"><button onclick="pv(5)">&larr; Tillbaka</button><button class="primary" onclick="nx(5)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s6" class="step card">
       <div class="ptitle">Steg 7 – VM-mästare</div>
       <div class="psub">Vilket av finallagen vinner VM? (10p för rätt)</div>
       <div class="rg" id="wing"></div>
-      <div class="em" id="e3">Välj ett lag.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="em" id="e6">Välj ett lag.</div>
+      <div class="nav"><button onclick="pv(6)">&larr; Tillbaka</button><button class="primary" onclick="nx(6)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s7" class="step card">
       <div class="ptitle">Steg 8 – Sveriges placering</div>
       <div class="psub">Hur långt tar sig Sverige i turneringen? (10p för rätt)</div>
       <div class="rg" id="sve-grid"></div>
-      <div class="em" id="e3">Välj ett alternativ.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="em" id="e7">Välj ett alternativ.</div>
+      <div class="nav"><button onclick="pv(7)">&larr; Tillbaka</button><button class="primary" onclick="nx(7)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s8" class="step card">
       <div class="ptitle">Steg 9 – Skyttekung</div>
       <div class="psub">Vilken spelare vinner skytteligan? (5p för rätt, måste stava rätt)</div>
       <div class="fl"><label>Spelarens namn</label><input type="text" id="skytt" placeholder="t.ex. Kylian Mbappé" autocomplete="off"/></div>
-      <div class="em" id="e3">Ange en spelare.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="em" id="e8">Ange en spelare.</div>
+      <div class="nav"><button onclick="pv(8)">&larr; Tillbaka</button><button class="primary" onclick="nx(8)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s9" class="step card">
       <div class="ptitle">Steg 10 – Antal mål</div>
       <div class="psub">Hur många mål görs totalt? Närmaste gissning vinner (5p exakt, 3p inom ±5, 1p inom ±10).</div>
       <div class="fl"><label>Antal mål</label><input type="number" id="mal" placeholder="t.ex. 260" min="50" max="600" style="max-width:160px"/></div>
       <div style="font-size:12px;color:#888;margin-top:4px">Tips: VM 2022 gav 172 mål på 64 matcher. VM 2026 har 104 matcher.</div>
-      <div class="em" id="e3">Ange ett tal mellan 50 och 600.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="em" id="e9">Ange ett tal mellan 50 och 600.</div>
+      <div class="nav"><button onclick="pv(9)">&larr; Tillbaka</button><button class="primary" onclick="nx(9)">Nästa &rarr;</button></div>
     </div>
-    <div id="s3" class="step card">
+    <div id="s10" class="step card">
       <div class="ptitle">Bekräfta ditt tips</div>
       <div class="psub">Kontrollera ditt tips och skicka in.</div>
       <div class="sumwrap" id="sumwrap"></div>
-      <div class="nav"><button onclick="pv(3)">&larr; Ändra</button><button class="primary" onclick="submit()">Skicka in tips &rarr;</button></div>
+      <div class="nav"><button onclick="pv(10)">&larr; Ändra</button><button class="primary" onclick="submit()">Skicka in tips &rarr;</button></div>
       <div class="success-msg" id="ok-msg">Ditt tips är inskickat! Tack!</div>
-    </div>
-  </div>
+    </div>  </div>
 
   <div id="v-stallning" class="view">
     <div id="phase-info"></div>
