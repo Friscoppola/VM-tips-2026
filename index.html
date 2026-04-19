@@ -463,7 +463,8 @@ function valid(s){
 
 function saveStep(s){
   if(s===0)tip.namn=document.getElementById('namn').value.trim();
-  if(s===9)tip.skytt=document.getElementById('skytt').value.trim();
+  if(s===1){GROUPS.forEach(g=>{tip.gr[g.l]={e:document.getElementById('ea-'+g.l).value,t2:document.getElementById('eb-'+g.l).value,t3:document.getElementById('ec-'+g.l).value};});}
+  if(s===8)tip.skytt=document.getElementById('skytt').value.trim();
   if(s===10)tip.mal=document.getElementById('mal').value;
 }
 
