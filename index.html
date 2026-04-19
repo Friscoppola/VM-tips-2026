@@ -511,7 +511,7 @@ function buildSum(){
 }
 
 async function submit(){
-  const btn=document.querySelector('#s11 button.primary');
+  const btn=document.querySelector('#s10 button.primary');
   btn.textContent='Skickar...';btn.disabled=true;
   await loadFromDB();
   entries.push({...tip,gr:{...tip.gr},s8:JSON.parse(JSON.stringify(tip.s8)),qf:JSON.parse(JSON.stringify(tip.qf)),sf:JSON.parse(JSON.stringify(tip.sf)),fin:{...tip.fin},ts:new Date().toLocaleString('sv-SE')});
