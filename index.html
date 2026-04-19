@@ -286,7 +286,6 @@ const API_URL=`https://api.jsonbin.io/v3/b/$69e209c5aaba8821970bf7e7`;
 function emptyTip(){
   return {
     namn:'',gr:{},
-    s16:Array.from({length:16},()=>({l1:'',l2:''})),
     s8:Array.from({length:8},()=>({l1:'',l2:''})),
     qf:Array.from({length:4},()=>({l1:'',l2:''})),
     sf:Array.from({length:2},()=>({l1:'',l2:''})),
@@ -460,7 +459,7 @@ function valid(s){
   if(s===7&&!tip.win){show('e3');return false;}
   if(s===8&&!tip.sve){show('e3');return false;}
   if(s===9&&!document.getElementById('skytt').value.trim()){show('e3');return false;}
-  if(s===10){const v=parseInt(document.getElementById('mal').value);if(isNaN(v)||v<50||v>600){show('e3');return false;}}
+  if(s===9){const v=parseInt(document.getElementById('mal').value);if(isNaN(v)||v<50||v>600){show('e9');return false;}}
   return true;
 }
 
@@ -468,7 +467,7 @@ function saveStep(s){
   if(s===0)tip.namn=document.getElementById('namn').value.trim();
   if(s===1){GROUPS.forEach(g=>{tip.gr[g.l]={e:document.getElementById('ea-'+g.l).value,t2:document.getElementById('eb-'+g.l).value,t3:document.getElementById('ec-'+g.l).value};});}
   if(s===8)tip.skytt=document.getElementById('skytt').value.trim();
-  if(s===10)tip.mal=document.getElementById('mal').value;
+  if(s===9)tip.mal=document.getElementById('mal').value;
 }
 
 function buildGroups(){
@@ -495,14 +494,12 @@ function syncGr(l){
 function buildSum(){
   const w=document.getElementById('sumwrap');
   const gr=GROUPS.map(g=>{const p=tip.gr[g.l];return`<div class="sr">G${g.l}: <span>${p?.e||'?'}</span> / <span>${p?.t2||'?'}</span> / <span>${p?.t3||'?'}</span></div>`;}).join('');
-  const s16h=tip.s16.map((m,i)=>`<div class="sr">S16-${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
   const s8h=tip.s8.map((m,i)=>`<div class="sr">S8-${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
   const qfh=tip.qf.map((m,i)=>`<div class="sr">KF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
   const sfh=tip.sf.map((m,i)=>`<div class="sr">SF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
   w.innerHTML=`
     <div class="ssec"><h3>Namn</h3><div style="font-size:15px;font-weight:600">${tip.namn}</div></div>
     <div class="ssec"><h3>Gruppspel (1/2/3)</h3><div class="sgrid">${gr}</div></div>
-    <div class="ssec"><h3>Sextondelsfinal</h3><div class="sgrid">${s16h}</div></div>
     <div class="ssec"><h3>Åttondelsfinal</h3><div class="sgrid">${s8h}</div></div>
     <div class="ssec"><h3>Kvartsfinaler</h3><div class="sgrid">${qfh}</div></div>
     <div class="ssec"><h3>Semifinaler</h3><div class="sgrid">${sfh}</div></div>
