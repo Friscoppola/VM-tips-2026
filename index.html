@@ -651,6 +651,82 @@ function renderStallning(){
   });
   th+=`</tbody></table>`;
   tw.innerHTML=th;
+
+  // Sub-charts per delmoment
+  renderSubCharts(scored, segments, phase);
+}
+
+function renderSubCharts(scored, segments, phase){
+  const existing = document.getElementById('sub-charts-wrap');
+  if(existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.id = 'sub-charts-wrap';
+  wrap.style.cssText = 'margin-top:2rem';
+
+  const activeSegs = segments.filter(s => {
+    if(s.key==='s8'||s.key==='qf'||s.key==='sf'||s.key==='fin'||s.key==='win') return phase>=2;
+    if(s.key==='skytt'||s.key==='mal'||s.key==='sve') return phase>=3;
+    return true;
+  });
+
+  activeSegs.forEach(seg => {
+    const hasPoints = scored.some(e => (e.det[seg.key]||0) > 0);
+    if(!hasPoints) return;
+
+    const sorted = [...scored].sort((a,b) => (b.det[seg.key]||0) - (a.det[seg.key]||0));
+    const maxVal = Math.max(...sorted.map(e => e.det[seg.key]||0), 1);
+    const barH = 120;
+    const barW = Math.max(30, Math.min(60, Math.floor(600/sorted.length) - 6));
+    const gap = 6;
+    const chartW = Math.max(600, sorted.length*(barW+gap)+60);
+    const svgH = barH + 60;
+
+    let svg = `<svg viewBox="0 0 ${chartW} ${svgH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:${chartW}px;font-family:system-ui,sans-serif">`;
+
+    // Y axis lines
+    for(let i=0;i<=2;i++){
+      const y = 15 + barH - (barH*i/2);
+      const val = Math.round(maxVal*i/2);
+      svg += `<line x1="35" y1="${y}" x2="${chartW-10}" y2="${y}" stroke="#e5e5e5" stroke-width="1"/>`;
+      svg += `<text x="30" y="${y+4}" text-anchor="end" font-size="10" fill="#888">${val}p</text>`;
+    }
+
+    sorted.forEach((e, idx) => {
+      const val = e.det[seg.key] || 0;
+      const x = 45 + idx*(barW+gap);
+      const h = Math.round((val/maxVal)*barH);
+      const y = 15 + barH - h;
+
+      svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${seg.color}" rx="2" opacity="0.85"/>`;
+      if(h > 12) svg += `<text x="${x+barW/2}" y="${y+h/2+4}" text-anchor="middle" font-size="10" fill="white" font-weight="600">${val}</text>`;
+
+      // Rank medal for top 3
+      const rankColors = ['#f9a825','#90a4ae','#a1664a'];
+      if(idx < 3){
+        svg += `<circle cx="${x+barW/2}" cy="${15+barH+14}" r="8" fill="${rankColors[idx]}"/>`;
+        svg += `<text x="${x+barW/2}" y="${15+barH+18}" text-anchor="middle" font-size="9" fill="white" font-weight="700">${idx+1}</text>`;
+      } else {
+        svg += `<text x="${x+barW/2}" y="${15+barH+18}" text-anchor="middle" font-size="9" fill="#888">${idx+1}</text>`;
+      }
+
+      // Name
+      const delar = (e.namn||'').split(' ');
+      svg += `<text x="${x+barW/2}" y="${15+barH+33}" text-anchor="middle" font-size="10" fill="#333" font-weight="500">${delar[0]||''}</text>`;
+      if(delar[1]) svg += `<text x="${x+barW/2}" y="${15+barH+45}" text-anchor="middle" font-size="9" fill="#666">${delar.slice(1).join(' ')}</text>`;
+    });
+
+    svg += `</svg>`;
+
+    const card = document.createElement('div');
+    card.style.cssText = 'background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;overflow-x:auto';
+    card.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem">
+      <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${seg.color}"></span>
+      <span style="font-size:14px;font-weight:600;color:#333">${seg.label}</span>
+    </div>${svg}`;
+    wrap.appendChild(card);
+  });
+
+  document.getElementById('stbl-wrap').after(wrap);
 }
 
 function renderMalstat(){
