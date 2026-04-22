@@ -137,65 +137,97 @@ button.danger:hover{background:#fce4e4}
     </div>
     <div id="s1" class="step card">
       <div class="ptitle">Steg 1 – Gruppspelet</div>
-      <div class="psub">Välj etta, tvåa OCH trea i varje grupp (A–L). 1p per rätt lag.</div>
+      <div class="psub">Välj vilket lag du tror vinner varje grupp (etta), kommer tvåa och trea. Du får 1 poäng för varje lag du har rätt på.</div>
       <div class="gg" id="ggrids"></div>
       <div class="em" id="e1">Fyll i alla 12 grupper. Inga dubletter inom samma grupp.</div>
       <div class="nav"><button onclick="pv(1)">&larr; Tillbaka</button><button class="primary" onclick="nx(1)">Nästa &rarr;</button></div>
     </div>
     <div id="s2" class="step card">
       <div class="ptitle">Steg 2 – Åttondelsfinal</div>
-      <div class="psub">8 matcher. Välj lag från de 36 lagen du tippade i gruppspelet. (3p per rätt lag)</div>
+      <div class="psub">8 matcher. Välj de lag du tror möts i varje åttondelsfinal. Lagen hämtas från dina gruppspelstips. (3p per rätt lag)</div>
+
+      <div style="background:#f0f7ff;border:1px solid #c2d9f5;border-radius:10px;padding:1rem;margin-bottom:1.25rem;font-size:13px;color:#1a1a1a">
+        <div style="font-weight:600;margin-bottom:.5rem;color:#1a73e8">Hur fungerar slutspelet i VM 2026?</div>
+        <p style="margin-bottom:.75rem;color:#444">32 lag går vidare från gruppspelet till <strong>sextondelsfinalen</strong>. De 16 vinnarna möts sedan i <strong>åttondelsfinalen</strong>. Eftersom vi inte tippar på sextondelsfinalen väljer du här fritt bland de 36 lag du tippade i gruppspelet!</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px">
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e0ecfc">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase">Gruppspel</div>
+            <div style="font-size:12px;font-weight:500;color:#333">11–27 juni</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e0ecfc">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase">Sextondelsfinal</div>
+            <div style="font-size:12px;font-weight:500;color:#333">28 juni–4 juli</div>
+          </div>
+          <div style="background:#1a73e8;border-radius:8px;padding:6px 10px;border:1px solid #1a73e8">
+            <div style="font-size:10px;font-weight:600;color:#b3d1fb;text-transform:uppercase">Åttondelsfinal</div>
+            <div style="font-size:12px;font-weight:600;color:#fff">4–7 juli</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e0ecfc">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase">Kvartsfinal</div>
+            <div style="font-size:12px;font-weight:500;color:#333">9–12 juli</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e0ecfc">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase">Semifinal</div>
+            <div style="font-size:12px;font-weight:500;color:#333">14–15 juli</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e0ecfc">
+            <div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase">Final</div>
+            <div style="font-size:12px;font-weight:500;color:#333">19 juli, New Jersey</div>
+          </div>
+        </div>
+      </div>
+
       <div class="match-grid" id="s8-matches"></div>
       <div class="em" id="e2">Fyll i alla 8 matcher. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(2)">&larr; Tillbaka</button><button class="primary" onclick="nx(2)">Nästa &rarr;</button></div>
     </div>
     <div id="s3" class="step card">
       <div class="ptitle">Steg 4 – Kvartsfinaler</div>
-      <div class="psub">4 matcher. Väljer bland de 16 lag från åttondelsfinalen. (4p per rätt lag)</div>
+      <div class="psub">4 matcher. Nu återstår 8 lag. Välj vilka två lag du tror möts i var och en av de 4 kvartsfinalmatcherna. Lagen hämtas från dina åttondelsfinaltips. (4p per rätt lag)</div>
       <div class="match-grid" id="qf-matches"></div>
       <div class="em" id="e3">Fyll i alla 4 matcher. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
     </div>
     <div id="s4" class="step card">
       <div class="ptitle">Steg 5 – Semifinaler</div>
-      <div class="psub">2 matcher. Väljer bland de 8 lag från kvartsfinalen. (5p per rätt lag)</div>
+      <div class="psub">2 matcher. 4 lag kvar! Välj vilka två lag som möts i var och en av de 2 semifinalerna. Lagen hämtas från dina kvartsfinaltips. (5p per rätt lag)</div>
       <div class="match-grid" id="sf-matches"></div>
       <div class="em" id="e4">Fyll i båda semifinalerna. Inga dubletter tillåtna.</div>
       <div class="nav"><button onclick="pv(4)">&larr; Tillbaka</button><button class="primary" onclick="nx(4)">Nästa &rarr;</button></div>
     </div>
     <div id="s5" class="step card">
       <div class="ptitle">Steg 6 – Finalen</div>
-      <div class="psub">Vilka två lag möts i finalen? Väljer bland de 4 lag från semifinalen. (6p per rätt lag)</div>
+      <div class="psub">Vem spelar finalen? Välj de två lag du tror möts om VM-guldet. Lagen hämtas från dina semifinaltips. (6p per rätt lag)</div>
       <div class="match-grid" id="fin-match"></div>
       <div class="em" id="e5">Välj de två finallagen. De får inte vara samma lag.</div>
       <div class="nav"><button onclick="pv(5)">&larr; Tillbaka</button><button class="primary" onclick="nx(5)">Nästa &rarr;</button></div>
     </div>
     <div id="s6" class="step card">
       <div class="ptitle">Steg 7 – VM-mästare</div>
-      <div class="psub">Vilket av finallagen vinner VM? (10p för rätt)</div>
+      <div class="psub">Vilket av de två finallagen vinner VM? Välj bland lagen du tippade i finalen. (10p för rätt svar)</div>
       <div class="rg" id="wing"></div>
       <div class="em" id="e6">Välj ett lag.</div>
       <div class="nav"><button onclick="pv(6)">&larr; Tillbaka</button><button class="primary" onclick="nx(6)">Nästa &rarr;</button></div>
     </div>
     <div id="s7" class="step card">
       <div class="ptitle">Steg 8 – Sveriges placering</div>
-      <div class="psub">Hur långt tar sig Sverige i turneringen? (10p för rätt)</div>
+      <div class="psub">Hur långt tror du att Sverige tar sig i VM 2026? (10p för rätt svar)</div>
       <div class="rg" id="sve-grid"></div>
       <div class="em" id="e7">Välj ett alternativ.</div>
       <div class="nav"><button onclick="pv(7)">&larr; Tillbaka</button><button class="primary" onclick="nx(7)">Nästa &rarr;</button></div>
     </div>
     <div id="s8" class="step card">
       <div class="ptitle">Steg 9 – Skyttekung</div>
-      <div class="psub">Vilken spelare vinner skytteligan? (5p för rätt, måste stava rätt)</div>
+      <div class="psub">Vilken spelare gör flest mål i turneringen? Skriv spelarens fullständiga namn – stavningen måste stämma exakt! (5p för rätt svar)</div>
       <div class="fl"><label>Spelarens namn</label><input type="text" id="skytt" placeholder="t.ex. Kylian Mbappé" autocomplete="off"/></div>
       <div class="em" id="e8">Ange en spelare.</div>
       <div class="nav"><button onclick="pv(8)">&larr; Tillbaka</button><button class="primary" onclick="nx(8)">Nästa &rarr;</button></div>
     </div>
     <div id="s9" class="step card">
       <div class="ptitle">Steg 10 – Antal mål</div>
-      <div class="psub">Hur många mål görs totalt? Närmaste gissning vinner (5p exakt, 3p inom ±5, 1p inom ±10).</div>
+      <div class="psub">Hur många mål görs totalt under hela VM? Närmaste gissning vinner. 5p för exakt rätt, 3p inom ±5 mål, 1p inom ±10 mål. Tips: VM 2022 gav 172 mål på 64 matcher – VM 2026 har 104 matcher!</div>
       <div class="fl"><label>Antal mål</label><input type="number" id="mal" placeholder="t.ex. 260" min="50" max="600" style="max-width:160px"/></div>
-      <div style="font-size:12px;color:#888;margin-top:4px">Tips: VM 2022 gav 172 mål på 64 matcher. VM 2026 har 104 matcher.</div>
+      
       <div class="em" id="e9">Ange ett tal mellan 50 och 600.</div>
       <div class="nav"><button onclick="pv(9)">&larr; Tillbaka</button><button class="primary" onclick="nx(9)">Nästa &rarr;</button></div>
     </div>
