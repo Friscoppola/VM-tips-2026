@@ -113,6 +113,7 @@ button.danger:hover{background:#fce4e4}
     <button class="tab active" onclick="showView('tips',this)">Mitt tips</button>
     <button class="tab" onclick="showView('stallning',this)">Ställning</button>
     <button class="tab" onclick="showView('malstat',this)">Målstatistik</button>
+    <button class="tab" onclick="showView('mina',this)">Mina svar</button>
     <button class="tab" onclick="showView('admin',this)">Admin</button>
   </div>
 
@@ -217,6 +218,17 @@ button.danger:hover{background:#fce4e4}
     <div id="malstat-wrap"><div class="loading">Laddar målstatistik...</div></div>
   </div>
 
+  <div id="v-mina" class="view">
+    <div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1rem">
+      <div class="ptitle" style="margin-bottom:.75rem">Sök dina svar</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input type="text" id="mina-namn" placeholder="Skriv ditt namn..." style="flex:1;max-width:300px" autocomplete="off"/>
+        <button class="primary" onclick="sokMinaSvar()">Visa mina svar</button>
+      </div>
+    </div>
+    <div id="mina-wrap"></div>
+  </div>
+
   <div id="v-admin" class="view">
     <div class="adm-sec">
       <h3>Aktiv fas</h3>
@@ -319,6 +331,7 @@ function showView(v,btn){
   document.getElementById('v-'+v).classList.add('active');
   if(btn)btn.classList.add('active');
   if(v==='stallning')loadFromDB().then(()=>renderStallning());
+  if(v==='mina')loadFromDB().then(()=>{document.getElementById('mina-wrap').innerHTML='';document.getElementById('mina-namn').value='';});
   if(v==='malstat')loadFromDB().then(()=>renderMalstat());
   if(v==='admin')loadFromDB().then(()=>{renderAdmGroups();renderAdmSlutspel();renderAdmEntries();updatePhaseBtns();});
 }
@@ -516,9 +529,13 @@ async function submit(){
   await loadFromDB();
   entries.push({...tip,gr:{...tip.gr},s8:JSON.parse(JSON.stringify(tip.s8)),qf:JSON.parse(JSON.stringify(tip.qf)),sf:JSON.parse(JSON.stringify(tip.sf)),fin:{...tip.fin},ts:new Date().toLocaleString('sv-SE')});
   await saveToDB();
+  const savedEntry = entries[entries.length-1];
   document.getElementById('ok-msg').style.display='block';
   btn.textContent='Skicka in tips →';btn.disabled=false;
-  setTimeout(()=>document.getElementById('ok-msg').style.display='none',4000);
+  setTimeout(()=>{
+    document.getElementById('ok-msg').style.display='none';
+    visaMinaSvarForEntry(savedEntry);
+  },2000);
   tip=emptyTip();
   document.getElementById('namn').value='';
   document.getElementById('skytt').value='';
@@ -937,6 +954,77 @@ async function delEntry(i){
 }
 async function rensaTips(){
   if(confirm('Är du säker? Alla tips raderas permanent.')){entries=[];await saveToDB();renderAdmEntries();}
+}
+
+function sokMinaSvar(){
+  const namn=document.getElementById('mina-namn').value.trim().toLowerCase();
+  if(!namn){return;}
+  const match=entries.filter(e=>(e.namn||'').toLowerCase().includes(namn));
+  const w=document.getElementById('mina-wrap');
+  if(!match.length){
+    w.innerHTML='<div style="font-size:13px;color:#888;padding:1rem 0">Hittade inga tips för det namnet.</div>';
+    return;
+  }
+  w.innerHTML=match.map(e=>renderEntryCard(e)).join('');
+}
+
+function visaMinaSvarForEntry(e){
+  // Switch to mina tab and show entry
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('v-mina').classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>{if(t.textContent==='Mina svar')t.classList.add('active');});
+  document.getElementById('mina-namn').value=e.namn||'';
+  document.getElementById('mina-wrap').innerHTML=renderEntryCard(e);
+}
+
+function renderEntryCard(e){
+  const score=calcScore(e,phase);
+  const gr=GROUPS.map(g=>{
+    const p=e.gr&&e.gr[g.l];
+    return`<div class="sr">G${g.l}: <span>${p?.e||'?'}</span> / <span>${p?.t2||'?'}</span> / <span>${p?.t3||'?'}</span></div>`;
+  }).join('');
+  const s8h=(e.s8||[]).map((m,i)=>`<div class="sr">S8-${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+  const qfh=(e.qf||[]).map((m,i)=>`<div class="sr">KF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+  const sfh=(e.sf||[]).map((m,i)=>`<div class="sr">SF${i+1}: <span>${m.l1||'?'}</span> vs <span>${m.l2||'?'}</span></div>`).join('');
+
+  const poangRad=(label,pts,color)=>pts>0?`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid #f0f0f0;font-size:13px"><span style="color:#555">${label}</span><span style="font-weight:600;color:${color}">${pts}p</span></div>`:'';
+
+  return`<div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1.25rem;margin-bottom:1rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+      <div>
+        <div style="font-size:18px;font-weight:600">${e.namn}</div>
+        <div style="font-size:12px;color:#888">${e.ts||''}</div>
+      </div>
+      <div style="background:#e8f0fe;border-radius:10px;padding:8px 16px;text-align:center">
+        <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.04em">Totalt</div>
+        <div style="font-size:24px;font-weight:700;color:#1a73e8">${score.total}p</div>
+      </div>
+    </div>
+
+    ${phase>=1&&score.total>0?`<div style="background:#f8f9fa;border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem">
+      <div style="font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Poängfördelning</div>
+      ${poangRad('Gruppspel',score.det.gr,'#34a853')}
+      ${poangRad('Åttondelsfinal',score.det.s8,'#1a73e8')}
+      ${poangRad('Kvartsfinal',score.det.qf,'#9334e6')}
+      ${poangRad('Semifinal',score.det.sf,'#e37400')}
+      ${poangRad('Final',score.det.fin,'#e53935')}
+      ${poangRad('Mästare',score.det.win,'#f9a825')}
+      ${poangRad('Sveriges placering',score.det.sve,'#1e7e34')}
+      ${poangRad('Skyttekung',score.det.skytt,'#c62828')}
+      ${poangRad('Antal mål',score.det.mal,'#00acc1')}
+    </div>`:''}
+
+    <div class="ssec"><h3>Gruppspel (1/2/3)</h3><div class="sgrid">${gr}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Åttondelsfinal</h3><div class="sgrid">${s8h}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Kvartsfinaler</h3><div class="sgrid">${qfh}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Semifinaler</h3><div class="sgrid">${sfh}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Final</h3><div class="sr"><span>${e.fin?.l1||'?'}</span> vs <span>${e.fin?.l2||'?'}</span></div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Mästare</h3><div style="font-size:15px;font-weight:600;color:#1e7e34">${e.win||'–'}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Sveriges placering</h3><div style="font-size:14px">${e.sve||'–'}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Skyttekung</h3><div style="font-size:14px">${e.skytt||'–'}</div></div>
+    <div class="ssec" style="margin-top:.75rem"><h3>Antal mål</h3><div style="font-size:14px">${e.mal||'–'}</div></div>
+  </div>`;
 }
 
 buildGroups();
