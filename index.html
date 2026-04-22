@@ -293,7 +293,7 @@ const SLABELS=["Namn","Gruppspel","Åttondelsfinal","Kvartsfinal","Semifinal","F
 const TOTAL=11;
 const API_KEY="$2a$10$ePF.okCtymM./SQJgRDGFOsbG6w/LiBQ6Z6bn6SeaV1pOFq1bI8GW";
 const BIN_ID="69e209c5aaba8821970bf7e7";
-const API_URL=`https://api.jsonbin.io/v3/b/$69e209c5aaba8821970bf7e7`;
+const API_URL="https://api.jsonbin.io/v3/b/69e209c5aaba8821970bf7e7";
 
 function emptyTip(){
   return {
@@ -310,7 +310,7 @@ let tip=emptyTip();
 
 async function loadFromDB(){
   try{
-    const r=await fetch(API_URL+'/latest',{headers:{'X-Master-Key':API_KEY}});
+    const r=await fetch(API_URL+'/latest',{headers:{'X-Master-Key':API_KEY,'X-Bin-Private':'false'}});
     const d=await r.json();
     const rec=d.record;
     entries=rec.entries||[];
