@@ -735,15 +735,98 @@ function renderSubCharts(scored, segments, phase){
     svg += `</svg>`;
 
     const card = document.createElement('div');
-    card.style.cssText = 'background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;overflow-x:auto';
-    card.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem">
-      <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${seg.color}"></span>
-      <span style="font-size:14px;font-weight:600;color:#333">${seg.label}</span>
+    card.style.cssText = 'background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;overflow-x:auto;cursor:pointer;transition:box-shadow .15s';
+    card.onmouseenter=()=>card.style.boxShadow='0 2px 8px rgba(0,0,0,.1)';
+    card.onmouseleave=()=>card.style.boxShadow='';
+    card.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${seg.color}"></span>
+        <span style="font-size:14px;font-weight:600;color:#333">${seg.label}</span>
+      </div>
+      <span style="font-size:12px;color:#1a73e8">Klicka för detaljer →</span>
     </div>${svg}`;
+    card.onclick = () => visaDelmomentDetalj(seg, sorted, scored);
     wrap.appendChild(card);
   });
 
   document.getElementById('stbl-wrap').after(wrap);
+}
+
+function visaDelmomentDetalj(seg, sorted, allScored){
+  const existing = document.getElementById('detalj-modal');
+  if(existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'detalj-modal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto';
+
+  const box = document.createElement('div');
+  box.style.cssText = 'background:#fff;border-radius:14px;padding:1.5rem;max-width:700px;width:100%;max-height:90vh;overflow-y:auto';
+
+  // Build detail table
+  let rows = '';
+  sorted.forEach((e, idx) => {
+    const pts = e.det[seg.key] || 0;
+    const rankColors = ['#f9a825','#90a4ae','#a1664a'];
+    const rankStyle = idx < 3 ? `font-weight:700;color:${rankColors[idx]}` : 'color:#888';
+
+    let tipContent = '';
+    if(seg.key === 'gr'){
+      tipContent = GROUPS.map(g => {
+        const p = e.gr && e.gr[g.l];
+        return `<span style="font-size:11px;background:#f0f0f0;border-radius:4px;padding:1px 6px;margin:1px;display:inline-block">G${g.l}: ${p?.e||'?'}/${p?.t2||'?'}/${p?.t3||'?'}</span>`;
+      }).join('');
+    } else if(seg.key === 's8'){
+      tipContent = (e.s8||[]).map((m,i) => `<span style="font-size:11px;background:#e8f0fe;border-radius:4px;padding:1px 6px;margin:1px;display:inline-block">S8-${i+1}: ${m.l1||'?'} vs ${m.l2||'?'}</span>`).join('');
+    } else if(seg.key === 'qf'){
+      tipContent = (e.qf||[]).map((m,i) => `<span style="font-size:11px;background:#f3e8fd;border-radius:4px;padding:1px 6px;margin:1px;display:inline-block">KF${i+1}: ${m.l1||'?'} vs ${m.l2||'?'}</span>`).join('');
+    } else if(seg.key === 'sf'){
+      tipContent = (e.sf||[]).map((m,i) => `<span style="font-size:11px;background:#fef3e2;border-radius:4px;padding:1px 6px;margin:1px;display:inline-block">SF${i+1}: ${m.l1||'?'} vs ${m.l2||'?'}</span>`).join('');
+    } else if(seg.key === 'fin'){
+      tipContent = `<span style="font-size:12px">${e.fin?.l1||'?'} vs ${e.fin?.l2||'?'}</span>`;
+    } else if(seg.key === 'win'){
+      tipContent = `<span style="font-size:12px;font-weight:500">${e.win||'–'}</span>`;
+    } else if(seg.key === 'sve'){
+      tipContent = `<span style="font-size:12px">${e.sve||'–'}</span>`;
+    } else if(seg.key === 'skytt'){
+      tipContent = `<span style="font-size:12px">${e.skytt||'–'}</span>`;
+    } else if(seg.key === 'mal'){
+      tipContent = `<span style="font-size:12px">${e.mal||'–'} mål</span>`;
+    }
+
+    rows += `<tr style="border-bottom:1px solid #f0f0f0">
+      <td style="padding:8px;${rankStyle}">${idx+1}</td>
+      <td style="padding:8px;font-weight:500">${e.namn}</td>
+      <td style="padding:8px;flex:1">${tipContent}</td>
+      <td style="padding:8px;font-weight:700;color:${seg.color};text-align:right">${pts}p</td>
+    </tr>`;
+  });
+
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:${seg.color}"></span>
+        <span style="font-size:20px;font-weight:600">${seg.label}</span>
+      </div>
+      <button onclick="document.getElementById('detalj-modal').remove()" style="font-size:13px;border-color:#ddd">Stäng ✕</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead>
+          <tr style="border-bottom:2px solid #e5e5e5">
+            <th style="padding:8px;text-align:left;font-size:12px;color:#888">#</th>
+            <th style="padding:8px;text-align:left;font-size:12px;color:#888">Namn</th>
+            <th style="padding:8px;text-align:left;font-size:12px;color:#888">Tips</th>
+            <th style="padding:8px;text-align:right;font-size:12px;color:#888">Poäng</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+
+  modal.appendChild(box);
+  modal.onclick = (ev) => { if(ev.target === modal) modal.remove(); };
+  document.body.appendChild(modal);
 }
 
 function renderMalstat(){
