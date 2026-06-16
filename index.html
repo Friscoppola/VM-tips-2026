@@ -133,14 +133,14 @@ button.danger:hover{background:#fce4e4}
       <div class="psub">Fyll i ditt namn för att starta tipset</div>
       <div class="fl"><label>Ditt namn</label><input type="text" id="namn" placeholder="Förnamn Efternamn" autocomplete="off"/></div>
       <div class="em" id="e0">Ange ditt namn.</div>
-      <div class="nav"><button class="primary" onclick="nx(0)">Starta tipset &rarr;</button></div>
+      <div class="nav"><button class="primary" onclick="nx(0)">Starta tipset &rarr;</button><button onclick="manuellSpara(0)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-0">Sparat ✓</span></div>
     </div>
     <div id="s1" class="step card">
       <div class="ptitle">Steg 1 – Gruppspelet</div>
       <div class="psub">Välj vilket lag du tror vinner varje grupp (etta), kommer tvåa och trea. Dessa tre lag per grupp – totalt 36 lag – är de som har möjlighet att gå vidare till slutspelet och de kommer att dyka upp som valbara alternativ i nästkommande steg. Du får 1 poäng för varje lag du placerar bland de tre som går vidare – och 1 bonuspoäng extra för varje lag du dessutom satt på exakt rätt plats. Max 6 poäng per grupp.</div>
       <div class="gg" id="ggrids"></div>
       <div class="em" id="e1">Fyll i alla 12 grupper. Inga dubletter inom samma grupp.</div>
-      <div class="nav"><button onclick="pv(1)">&larr; Tillbaka</button><button class="primary" onclick="nx(1)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(1)">&larr; Tillbaka</button><button class="primary" onclick="nx(1)">Nästa &rarr;</button><button onclick="manuellSpara(1)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-1">Sparat ✓</span></div>
     </div>
     <div id="s2" class="step card">
       <div class="ptitle">Steg 2 – Åttondelsfinal</div>
@@ -179,49 +179,49 @@ button.danger:hover{background:#fce4e4}
 
       <div class="match-grid" id="s8-matches"></div>
       <div class="em" id="e2">Fyll i alla 8 matcher. Inga dubletter tillåtna.</div>
-      <div class="nav"><button onclick="pv(2)">&larr; Tillbaka</button><button class="primary" onclick="nx(2)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(2)">&larr; Tillbaka</button><button class="primary" onclick="nx(2)">Nästa &rarr;</button><button onclick="manuellSpara(2)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-2">Sparat ✓</span></div>
     </div>
     <div id="s3" class="step card">
       <div class="ptitle">Steg 4 – Kvartsfinaler</div>
       <div class="psub">4 matcher. Nu återstår 8 lag. Välj vilka två lag du tror möts i var och en av de 4 kvartsfinalmatcherna. Lagen hämtas från dina åttondelsfinaltips. (4p per rätt lag)</div>
       <div class="match-grid" id="qf-matches"></div>
       <div class="em" id="e3">Fyll i alla 4 matcher. Inga dubletter tillåtna.</div>
-      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(3)">&larr; Tillbaka</button><button class="primary" onclick="nx(3)">Nästa &rarr;</button><button onclick="manuellSpara(3)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-3">Sparat ✓</span></div>
     </div>
     <div id="s4" class="step card">
       <div class="ptitle">Steg 5 – Semifinaler</div>
       <div class="psub">2 matcher. 4 lag kvar! Välj vilka två lag som möts i var och en av de 2 semifinalerna. Lagen hämtas från dina kvartsfinaltips. (5p per rätt lag)</div>
       <div class="match-grid" id="sf-matches"></div>
       <div class="em" id="e4">Fyll i båda semifinalerna. Inga dubletter tillåtna.</div>
-      <div class="nav"><button onclick="pv(4)">&larr; Tillbaka</button><button class="primary" onclick="nx(4)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(4)">&larr; Tillbaka</button><button class="primary" onclick="nx(4)">Nästa &rarr;</button><button onclick="manuellSpara(4)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-4">Sparat ✓</span></div>
     </div>
     <div id="s5" class="step card">
       <div class="ptitle">Steg 6 – Finalen</div>
       <div class="psub">Vem spelar finalen? Välj de två lag du tror möts om VM-guldet. Lagen hämtas från dina semifinaltips. (6p per rätt lag)</div>
       <div class="match-grid" id="fin-match"></div>
       <div class="em" id="e5">Välj de två finallagen. De får inte vara samma lag.</div>
-      <div class="nav"><button onclick="pv(5)">&larr; Tillbaka</button><button class="primary" onclick="nx(5)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(5)">&larr; Tillbaka</button><button class="primary" onclick="nx(5)">Nästa &rarr;</button><button onclick="manuellSpara(5)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-5">Sparat ✓</span></div>
     </div>
     <div id="s6" class="step card">
       <div class="ptitle">Steg 7 – VM-mästare</div>
       <div class="psub">Vilket av de två finallagen vinner VM? Välj bland lagen du tippade i finalen. (10p för rätt svar)</div>
       <div class="rg" id="wing"></div>
       <div class="em" id="e6">Välj ett lag.</div>
-      <div class="nav"><button onclick="pv(6)">&larr; Tillbaka</button><button class="primary" onclick="nx(6)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(6)">&larr; Tillbaka</button><button class="primary" onclick="nx(6)">Nästa &rarr;</button><button onclick="manuellSpara(6)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-6">Sparat ✓</span></div>
     </div>
     <div id="s7" class="step card">
       <div class="ptitle">Steg 8 – Sveriges placering</div>
       <div class="psub">Hur långt tror du att Sverige tar sig i VM 2026? (10p för rätt svar)</div>
       <div class="rg" id="sve-grid"></div>
       <div class="em" id="e7">Välj ett alternativ.</div>
-      <div class="nav"><button onclick="pv(7)">&larr; Tillbaka</button><button class="primary" onclick="nx(7)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(7)">&larr; Tillbaka</button><button class="primary" onclick="nx(7)">Nästa &rarr;</button><button onclick="manuellSpara(7)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-7">Sparat ✓</span></div>
     </div>
     <div id="s8" class="step card">
       <div class="ptitle">Steg 9 – Skyttekung</div>
       <div class="psub">Vilken spelare gör flest mål i turneringen? Skriv spelarens fullständiga namn – stavningen måste stämma exakt! (5p för rätt svar)</div>
       <div class="fl"><label>Spelarens namn</label><input type="text" id="skytt" placeholder="t.ex. Kylian Mbappé" autocomplete="off"/></div>
       <div class="em" id="e8">Ange en spelare.</div>
-      <div class="nav"><button onclick="pv(8)">&larr; Tillbaka</button><button class="primary" onclick="nx(8)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(8)">&larr; Tillbaka</button><button class="primary" onclick="nx(8)">Nästa &rarr;</button><button onclick="manuellSpara(8)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-8">Sparat ✓</span></div>
     </div>
     <div id="s9" class="step card">
       <div class="ptitle">Steg 10 – Antal mål</div>
@@ -229,7 +229,7 @@ button.danger:hover{background:#fce4e4}
       <div class="fl"><label>Antal mål</label><input type="number" id="mal" placeholder="t.ex. 260" min="50" max="600" style="max-width:160px"/></div>
       
       <div class="em" id="e9">Ange ett tal mellan 50 och 600.</div>
-      <div class="nav"><button onclick="pv(9)">&larr; Tillbaka</button><button class="primary" onclick="nx(9)">Nästa &rarr;</button></div>
+      <div class="nav"><button onclick="pv(9)">&larr; Tillbaka</button><button class="primary" onclick="nx(9)">Nästa &rarr;</button><button onclick="manuellSpara(9)">💾 Spara utkast</button><span class="success-msg" id="draft-msg-9">Sparat ✓</span></div>
     </div>
     <div id="s10" class="step card">
       <div class="ptitle">Bekräfta ditt tips</div>
@@ -459,6 +459,7 @@ function syncMatch(key,i){
   const l2=document.getElementById(key+'-'+i+'-l2').value;
   if(key==='fin')tip.fin={l1,l2};
   else tip[key][i]={l1,l2};
+  saveDraft();
 }
 
 function buildWin(){
@@ -468,7 +469,7 @@ function buildWin(){
   teams.forEach(t=>{
     const d=document.createElement('div');d.className='ri'+(tip.win===t?' sel':'');
     d.textContent=t;
-    d.onclick=()=>{tip.win=t;g.querySelectorAll('.ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
+    d.onclick=()=>{tip.win=t;g.querySelectorAll('.ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));saveDraft();};
     g.appendChild(d);
   });
 }
@@ -478,7 +479,7 @@ function buildSveGrid(){
   ['Gruppspelet','Åttondelsfinal','Kvartsfinal','Semifinal','Fyra','Trea','Tvåa','Vinnare'].forEach(t=>{
     const d=document.createElement('div');d.className='ri'+(tip.sve===t?' sel':'');
     d.textContent=t;
-    d.onclick=()=>{tip.sve=t;g.querySelectorAll('.ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));};
+    d.onclick=()=>{tip.sve=t;g.querySelectorAll('.ri').forEach(el=>el.classList.toggle('sel',el.textContent===t));saveDraft();};
     g.appendChild(d);
   });
 }
@@ -525,6 +526,44 @@ function saveStep(s){
   if(s===1){GROUPS.forEach(g=>{tip.gr[g.l]={e:document.getElementById('ea-'+g.l).value,t2:document.getElementById('eb-'+g.l).value,t3:document.getElementById('ec-'+g.l).value};});}
   if(s===8)tip.skytt=document.getElementById('skytt').value.trim();
   if(s===9)tip.mal=document.getElementById('mal').value;
+  saveDraft();
+}
+
+// ── Utkast: spara per grupp/omgång så inget tappas vid omladdning ──────────────
+const DRAFT_KEY='vmtips_utkast';
+function saveDraft(){
+  try{localStorage.setItem(DRAFT_KEY,JSON.stringify({tip,cur}));}catch(e){}
+}
+function loadDraft(){
+  try{
+    const raw=localStorage.getItem(DRAFT_KEY);
+    if(!raw)return false;
+    const d=JSON.parse(raw);
+    if(d&&d.tip){tip={...emptyTip(),...d.tip};return true;}
+  }catch(e){}
+  return false;
+}
+function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
+
+function manuellSpara(s){
+  saveStep(s);
+  const el=document.getElementById('draft-msg-'+s);
+  if(el){el.style.display='inline';setTimeout(()=>{el.style.display='none';},2000);}
+}
+
+function restoreDraftFields(){
+  if(tip.namn&&document.getElementById('namn'))document.getElementById('namn').value=tip.namn;
+  if(tip.skytt&&document.getElementById('skytt'))document.getElementById('skytt').value=tip.skytt;
+  if(tip.mal&&document.getElementById('mal'))document.getElementById('mal').value=tip.mal;
+  buildGroups();
+  GROUPS.forEach(g=>{
+    const p=tip.gr&&tip.gr[g.l];
+    if(p){
+      if(p.e)document.getElementById('ea-'+g.l).value=p.e;
+      if(p.t2)document.getElementById('eb-'+g.l).value=p.t2;
+      if(p.t3)document.getElementById('ec-'+g.l).value=p.t3;
+    }
+  });
 }
 
 function buildGroups(){
@@ -546,6 +585,7 @@ function syncGr(l){
     t2:document.getElementById('eb-'+l).value,
     t3:document.getElementById('ec-'+l).value
   };
+  saveDraft();
 }
 
 function buildSum(){
@@ -573,6 +613,7 @@ async function submit(){
   await loadFromDB();
   entries.push({...tip,gr:{...tip.gr},s8:JSON.parse(JSON.stringify(tip.s8)),qf:JSON.parse(JSON.stringify(tip.qf)),sf:JSON.parse(JSON.stringify(tip.sf)),fin:{...tip.fin},ts:new Date().toLocaleString('sv-SE')});
   await saveToDB();
+  clearDraft();
   const savedEntry = entries[entries.length-1];
   document.getElementById('ok-msg').style.display='block';
   btn.textContent='Skicka in tips →';btn.disabled=false;
@@ -589,8 +630,8 @@ async function submit(){
 
 function calcScore(e,ph){
   let p=0,det={gr:0,s16:0,s8:0,qf:0,sf:0,fin:0,win:0,sve:0,skytt:0,mal:0};
-  if(ph>=1&&results.gr){
-    const grFacit=(ph===1&&results.grR&&results.grR[stViewRound])?results.grR[stViewRound]:results.gr;
+  if(ph>=1&&(results.grG||results.gr)){
+    const grFacit={};GROUPS.forEach(g=>{if(results.grG&&results.grG[g.l]){grFacit[g.l]=results.grG[g.l];}else if(results.gr&&results.gr[g.l]){grFacit[g.l]=results.gr[g.l];}});
     GROUPS.forEach(g=>{
       const rg=grFacit[g.l],eg=e.gr&&e.gr[g.l];
       if(!rg||!eg)return;
@@ -635,12 +676,10 @@ function renderStallning(){
   const phCls=['','p1','p2','p3'];
   let extra='';
   if(phase===1){
-    const maxR=results.grRound||1;
-    if(stViewRound>maxR)stViewRound=maxR;
-    const lbl=stViewRound>=3?'slutlig':'preliminär';
-    extra=`<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:.6rem">`
-      +[1,2,3].map(r=>`<button class="pbtn${stViewRound===r?' ap':''}"${r>maxR?' disabled style="opacity:.4;cursor:not-allowed"':''} onclick="setStRound(${r})">Efter omgång ${r}</button>`).join('')
-      +`<span style="font-size:12px;color:#888;margin-left:6px">Ställning är ${lbl}</span></div>`;
+    const tot=GROUPS.length;
+    const done=GROUPS.filter(g=>results.grG&&results.grG[g.l]&&results.grG[g.l].round>=3).length;
+    const note=done>=tot?'Alla grupper slutgiltiga':(done+' av '+tot+' grupper slutgiltiga – övriga preliminära');
+    extra=`<div style="margin-top:.6rem"><span style="font-size:12px;color:#888">${note}</span></div>`;
   }
   pi.innerHTML=`<div class="phase-badge ${phCls[phase]}">${phNames[phase]}</div>${extra}`;
   const cw=document.getElementById('chart-wrap');
@@ -1012,11 +1051,11 @@ function renderAdmGroups(){
   const rdata=(results.grR&&results.grR[admRound])||{};
   const rsel=document.getElementById('adm-round-sel');
   if(rsel){
-    rsel.innerHTML=[1,2,3].map(r=>`<button class="pbtn${admRound===r?' ap':''}" onclick="setAdmRound(${r})">Omgång ${r}</button>`).join('')
-      +`<span style="margin-left:12px;font-size:13px;color:#666">Visas i ställningen: <b>Omgång ${results.grRound||1}</b></span>`;
+    rsel.innerHTML=`<span style="font-size:13px;color:#666">Varje grupp sparas separat med sin egen omgång. Omgång 1–2 ger preliminär poäng, omgång 3 är slutgiltig.</span>`;
   }
   GROUPS.forEach(g=>{
-    const rg=rdata[g.l]||{e:'',t2:'',t3:''};
+    const cg=(results.grG&&results.grG[g.l])||{e:'',t2:'',t3:'',round:0};
+    const rg=cg;
     const o=g.t.map(t=>`<option value="${t}"${rg.e===t?' selected':''}>${t}</option>`).join('');
     const o2=g.t.map(t=>`<option value="${t}"${rg.t2===t?' selected':''}>${t}</option>`).join('');
     const o3=g.t.map(t=>`<option value="${t}"${rg.t3===t?' selected':''}>${t}</option>`).join('');
@@ -1024,7 +1063,13 @@ function renderAdmGroups(){
     d.innerHTML=`<div class="adm-gl">Grupp ${g.l}</div>
       <div class="adm-pr"><label>Etta</label><select id="ra-${g.l}"><option value="">—</option>${o}</select></div>
       <div class="adm-pr"><label>Tvåa</label><select id="rb-${g.l}"><option value="">—</option>${o2}</select></div>
-      <div class="adm-pr"><label>Trea</label><select id="rc-${g.l}"><option value="">—</option>${o3}</select></div>`;
+      <div class="adm-pr"><label>Trea</label><select id="rc-${g.l}"><option value="">—</option>${o3}</select></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <span style="font-size:12px;color:#666">Omgång:</span>
+        ${[1,2,3].map(r=>`<button class="pbtn${(cg.round||0)===r?' ap':''}" id="gr-${g.l}-r${r}" onclick="setGroupRound('${g.l}',${r})">${r}</button>`).join('')}
+        <button class="primary" style="margin-left:auto" onclick="saveGroup('${g.l}')">Spara grupp ${g.l}</button>
+      </div>
+      <div style="font-size:12px;margin-top:6px;${cg.round?'color:#1e7e34':'color:#888'}">${cg.round?(cg.round>=3?'✓ Slutgiltig (omgång 3 sparad)':'Preliminär – omgång '+cg.round+' sparad'):'Ej sparad ännu'}</div>`;
     c.appendChild(d);
   });
 }
@@ -1068,20 +1113,27 @@ function renderAdmSlutspel(){
   if(results.mal)document.getElementById('adm-mal').value=results.mal;
 }
 
+let pendingRound={};
+function setGroupRound(l,r){
+  pendingRound[l]=r;
+  [1,2,3].forEach(n=>{const b=document.getElementById('gr-'+l+'-r'+n);if(b)b.classList.toggle('ap',n===r);});
+}
+async function saveGroup(l){
+  const r=pendingRound[l]||(results.grG&&results.grG[l]&&results.grG[l].round)||0;
+  if(!r){alert('Välj vilken omgång ('+l+') gäller innan du sparar.');return;}
+  const e=document.getElementById('ra-'+l).value;
+  const t2=document.getElementById('rb-'+l).value;
+  const t3=document.getElementById('rc-'+l).value;
+  if(!results.grG)results.grG={};
+  results.grG[l]={e:e,t2:t2,t3:t3,round:r};
+  await saveToDB();
+  renderAdmGroups();
+  const ok=document.getElementById('adm-ok');
+  if(ok){ok.textContent='Grupp '+l+' sparad (omgång '+r+')';ok.style.display='block';setTimeout(()=>{ok.style.display='none';ok.textContent='Sparat!';},2500);}
+}
+
 async function saveAdmin(){
-  if(!results.gr)results.gr={};
-  if(!results.grR)results.grR={};
-  const roundData={};
-  GROUPS.forEach(g=>{
-    roundData[g.l]={
-      e:document.getElementById('ra-'+g.l).value,
-      t2:document.getElementById('rb-'+g.l).value,
-      t3:document.getElementById('rc-'+g.l).value
-    };
-  });
-  results.grR[admRound]=roundData;
-  results.grRound=admRound;
-  results.gr=roundData;
+  if(!results.grG)results.grG={};
   const readAdm=(cid,count)=>Array.from({length:count},(_,i)=>{
     const a=document.getElementById('adm-'+cid+'-'+i+'-l1');
     const b=document.getElementById('adm-'+cid+'-'+i+'-l2');
@@ -1191,7 +1243,12 @@ function renderEntryCard(e){
   </div>`;
 }
 
-buildGroups();
+// Återställ ev. sparat utkast så inget tappas vid omladdning
+if(loadDraft()){
+  restoreDraftFields();
+}else{
+  buildGroups();
+}
 buildStepper();
 </script>
 </body>
